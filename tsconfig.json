@@ -1,0 +1,19 @@
+{
+  "extends": "@tsconfig/node10/tsconfig.json",
+  "include": [
+    "packages/*/src/**/*.ts"
+  ],
+  "typedocOptions": {
+    "disableSources": true,
+    "entryDocument": "index.md",
+    "entryPoints": [
+      "./packages/selderee/src/selderee.ts"
+    ],
+    "excludePrivate": true,
+    "hideBreadcrumbs": false,
+    "includeVersion": true,
+    "name": "API documentation",
+    "readme": "none",
+    "out": "docs"
+  }
+}

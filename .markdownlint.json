@@ -1,0 +1,10 @@
+{
+  "default": true,
+  "first-line-heading": false,
+  "line-length": false,
+  "no-duplicate-header": { "allow_different_nesting": true },
+  "no-inline-html": { "allowed_elements": ["details", "summary"] },
+  "no-multiple-blanks": { "maximum": 2 },
+  "no-space-in-code": false,
+  "no-trailing-punctuation": { "punctuation": ".,;!。，；：！" }
+}
