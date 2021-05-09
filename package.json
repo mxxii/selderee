@@ -7,19 +7,20 @@
   "files": [],
   "scripts": {
     "build:docs": "typedoc",
+    "build:plugin-htmlparser2": "cd ./packages/plugin-htmlparser2/ && npm run build",
     "build:selderee": "cd ./packages/selderee/ && npm run build",
     "build": "npm run copy:readme && concurrently npm:build:*",
     "checkAll": "npm run lint && npm test",
     "copy:readme": "copyfiles README.md packages/selderee/",
     "example": "node ./example/example.cjs",
+    "install:plugin-htmlparser2": "cd ./packages/plugin-htmlparser2/ && npm i",
     "install:selderee": "cd ./packages/selderee/ && npm i",
     "lint:eslint": "eslint .",
     "lint:md": "markdownlint --ignore-path .gitignore .",
     "lint": "concurrently npm:lint:*",
     "postinstall": "concurrently npm:install:*",
     "prepublishOnly": "npm run checkAll",
-    "test": "ava",
-    "test-u": "ava --update-snapshots"
+    "test": "ava"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.1",
@@ -32,6 +33,7 @@
     "eslint": "^7.25.0",
     "eslint-plugin-jsonc": "^1.2.1",
     "eslint-plugin-tsdoc": "^0.2.14",
+    "htmlparser2": "^6.1.0",
     "markdownlint-cli": "^0.27.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.47.0",

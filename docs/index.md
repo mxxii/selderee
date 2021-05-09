@@ -1,16 +1,10 @@
-API documentation - v0.5.0
+API documentation
 
-# API documentation - v0.5.0
+# API documentation
 
 ## Table of contents
 
-### Namespaces
+### Modules
 
-- [Ast](modules/ast.md)
-- [Treeify](modules/treeify.md)
-- [Types](modules/types.md)
-
-### Classes
-
-- [DecisionTree](classes/decisiontree.md)
-- [Picker](classes/picker.md)
+- [plugin-htmlparser2/src/hp2-builder](modules/plugin_htmlparser2_src_hp2_builder.md)
+- [selderee/src/selderee](modules/selderee_src_selderee.md)

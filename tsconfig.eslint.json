@@ -1,5 +1,11 @@
 {
   "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": [
+      "./packages/selderee/src",
+      "./packages/plugin-htmlparser2/src"
+    ]
+  },
   "include": [
     "packages/*/src/**/*.ts",
     "packages/*/test/**/*.ts",

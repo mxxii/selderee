@@ -1,6 +1,8 @@
-[API documentation - v0.5.0](../index.md) / Picker
+[API documentation](../index.md) / [selderee/src/selderee](../modules/selderee_src_selderee.md) / Picker
 
 # Class: Picker<L, V\>
+
+[selderee/src/selderee](../modules/selderee_src_selderee.md).Picker
 
 Simple wrapper around the matcher function.
 Recommended return type for builder plugins.
@@ -16,18 +18,18 @@ Recommended return type for builder plugins.
 
 ### Constructors
 
-- [constructor](picker.md#constructor)
+- [constructor](selderee_src_selderee.picker.md#constructor)
 
 ### Methods
 
-- [pick1](picker.md#pick1)
-- [pickAll](picker.md#pickall)
+- [pick1](selderee_src_selderee.picker.md#pick1)
+- [pickAll](selderee_src_selderee.picker.md#pickall)
 
 ## Constructors
 
 ### constructor
 
-\+ **new Picker**<L, V\>(`f`: [*MatcherFunction*](../modules/types.md#matcherfunction)<L, V\>): [*Picker*](picker.md)<L, V\>
+\+ **new Picker**<L, V\>(`f`: [*MatcherFunction*](../modules/selderee_src_selderee.types.md#matcherfunction)<L, V\>): [*Picker*](selderee_src_selderee.picker.md)<L, V\>
 
 Create new Picker object.
 
@@ -42,9 +44,9 @@ Create new Picker object.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `f` | [*MatcherFunction*](../modules/types.md#matcherfunction)<L, V\> | the function that matches an element and returns all associated values. |
+| `f` | [*MatcherFunction*](../modules/selderee_src_selderee.types.md#matcherfunction)<L, V\> | the function that matches an element and returns all associated values. |
 
-**Returns:** [*Picker*](picker.md)<L, V\>
+**Returns:** [*Picker*](selderee_src_selderee.picker.md)<L, V\>
 
 ## Methods
 
@@ -71,7 +73,7 @@ ___
 
 ### pickAll
 
-▸ **pickAll**(`el`: L): [*ValueContainer*](../modules/ast.md#valuecontainer)<V\>[]
+▸ **pickAll**(`el`: L): [*ValueContainer*](../modules/selderee_src_selderee.ast.md#valuecontainer)<V\>[]
 
 Run the selectors decision tree against one HTML Element
 and return all matched associated values
@@ -86,7 +88,7 @@ Client code then decides how to further process them
 | :------ | :------ | :------ |
 | `el` | L | an HTML Element. |
 
-**Returns:** [*ValueContainer*](../modules/ast.md#valuecontainer)<V\>[]
+**Returns:** [*ValueContainer*](../modules/selderee_src_selderee.ast.md#valuecontainer)<V\>[]
 
 all associated values along with
 selector specificities for all matched selectors.

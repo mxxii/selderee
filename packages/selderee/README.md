@@ -13,9 +13,9 @@
 
 The problem statement: there are multiple CSS selectors with attached handlers, and a HTML DOM to process. For each HTML Element a matching handler has to be found and applied.
 
-The naive approach is to walk through the DOM and test each and every selector against each Element. This means `n * m` complexity.
+The naive approach is to walk through the DOM and test each and every selector against each Element. This means *O(n\*m)* complexity.
 
-It is pretty clear though that if we have selectors that have something in common then we can reduce the number of checks.
+It is pretty clear though that if we have selectors that share something in common then we can reduce the number of checks.
 
 The main `selderee` package offers the tree structure. Working decision functions for specific DOM implementations are built via plugins.
 
@@ -43,12 +43,13 @@ The main `selderee` package offers the tree structure. Working decision function
 | Package   | Version   | Folder    | Changelog |
 | --------- | --------- | --------- | --------- |
 | [selderee](https://www.npmjs.com/package/selderee) | [![npm](https://img.shields.io/npm/v/selderee?logo=npm)](https://www.npmjs.com/package/selderee) | [/packages/selderee](https://github.com/mxxii/selderee/tree/main/packages/selderee/) | [changelog](https://github.com/mxxii/selderee/blob/main/packages/selderee/CHANGELOG.md) |
+| [@selderee/plugin-htmlparser2](https://www.npmjs.com/package/@selderee/plugin-htmlparser2) | [![npm](https://img.shields.io/npm/v/@selderee/plugin-htmlparser2?logo=npm)](https://www.npmjs.com/package/@selderee/plugin-htmlparser2) | [/packages/plugin-htmlparser2](https://github.com/mxxii/selderee/tree/main/packages/plugin-htmlparser2/) | [changelog](https://github.com/mxxii/selderee/blob/main/packages/plugin-htmlparser2/CHANGELOG.md) |
 
 
 ## Install
 
 ```shell
-> npm i selderee
+> npm i selderee @selderee/plugin-htmlparser2
 ```
 
 
@@ -60,16 +61,19 @@ The main `selderee` package offers the tree structure. Working decision function
 ## Usage example
 
 ```js
-const { DecisionTree, Treeify } = require('selderee');
+const htmlparser2 = require('htmlparser2');
+const util = require('util');
 
-// Object can also be used if there are no repeating selectors.
+const { DecisionTree, Treeify } = require('selderee');
+const { hp2Builder } = require('@selderee/plugin-htmlparser2');
+
 const selectorValuePairs = [
-  ['div', 'A'],
-  ['div.foo[bar]', 'B'],
-  ['p > div', 'C'],
-  ['p.foo', 'D'],
-  ['p > div.foo', 'E'],
-  ['div[class~=foo]', 'F'],
+  ['p', 'A'],
+  ['p.foo[bar]', 'B'],
+  ['p[class~=foo]', 'C'],
+  ['div.foo', 'D'],
+  ['div > p.foo', 'E'],
+  ['div > p', 'F'],
   ['#baz', 'G']
 ];
 
@@ -79,8 +83,25 @@ const selectorsDecisionTree = new DecisionTree(selectorValuePairs);
 // `treeify` builder produces a string output for testing and debug purposes.
 // `treeify` expects string values attached to each selector.
 const prettyTree = selectorsDecisionTree.build(Treeify.treeify);
-
 console.log(prettyTree);
+
+const html = /*html*/`<html><body>
+  <div><p class="foo qux">second</p></div>
+</body></html>`;
+const dom = htmlparser2.parseDocument(html);
+const element = dom.children[0].children[0].children[1].children[0];
+
+// `hp2Builder` produces a picker that can pick values
+// from the selectors tree.
+const picker = selectorsDecisionTree.build(hp2Builder);
+
+// Get all matches
+const allMatches = picker.pickAll(element);
+console.log(util.inspect(allMatches, { breakLength: 50, depth: null }));
+
+// or get the value from the most specific match.
+const bestMatch = picker.pick1(element);
+console.log(`Best matched value: ${bestMatch}`);
 ```
 
 <details><summary>Example output</summary>
@@ -88,28 +109,33 @@ console.log(prettyTree);
 ```text
 ▽
 ├─◻ Tag name
-│ ╟─◇ = div
+│ ╟─◇ = p
 │ ║ ┠─▣ Attr value: class
 │ ║ ┃ ╙─◈ ~= "foo"
 │ ║ ┃   ┠─◨ Attr presence: bar
 │ ║ ┃   ┃ ┖─◁ #1 [0,2,1] B
-│ ║ ┃   ┠─◁ #5 [0,1,1] F
+│ ║ ┃   ┠─◁ #2 [0,1,1] C
 │ ║ ┃   ┖─◉ Push element: >
 │ ║ ┃     └─◻ Tag name
-│ ║ ┃       ╙─◇ = p
+│ ║ ┃       ╙─◇ = div
 │ ║ ┃         ┖─◁ #4 [0,1,2] E
 │ ║ ┠─◁ #0 [0,0,1] A
 │ ║ ┖─◉ Push element: >
 │ ║   └─◻ Tag name
-│ ║     ╙─◇ = p
-│ ║       ┖─◁ #2 [0,0,2] C
-│ ╙─◇ = p
+│ ║     ╙─◇ = div
+│ ║       ┖─◁ #5 [0,0,2] F
+│ ╙─◇ = div
 │   ┖─▣ Attr value: class
 │     ╙─◈ ~= "foo"
 │       ┖─◁ #3 [0,1,1] D
 └─▣ Attr value: id
   ╙─◈ = "baz"
     ┖─◁ #6 [1,0,0] G
+[ { index: 2, value: 'C', specificity: [ 0, 1, 1 ] },
+  { index: 4, value: 'E', specificity: [ 0, 1, 2 ] },
+  { index: 0, value: 'A', specificity: [ 0, 0, 1 ] },
+  { index: 5, value: 'F', specificity: [ 0, 0, 2 ] } ]
+Best matched value: E
 ```
 
 *Some gotcha: you may notice the check for `#baz` has to be performed every time the decision tree is called. If it happens to be `p#baz` or `div#baz` or even `.foo#baz` - it would be much better to write it like this. Deeper, narrower tree means less checks on average. (in case of `.foo#baz` the class check might finally outweight the tag name check and rebalance the tree.)*
