@@ -72,3 +72,8 @@ test('same combinators', snapshotMacro, [
   ['[bar] + [foo]', 'value 1'],
   ['[bar] + [foo]', 'value 2']
 ]);
+
+test('repeated simple selectors', snapshotMacro, [
+  ['[foo][foo].bar.bar.bar.bar.bar', 'value 1'],
+  ['[foo]', 'value 2']
+]);

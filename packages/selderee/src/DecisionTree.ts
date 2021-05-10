@@ -123,7 +123,11 @@ function reduceSelectorVariants (ast: parseley.Ast.CompoundSelector): void {
 function weave<V> (items: AstTerminalPair<V>[]): Ast.DecisionTreeNode<V>[] {
   const branches: Ast.DecisionTreeNode<V>[] = [];
   while (items.length) {
-    const topKind = findTopKind(items);
+    const topKind = findTopKey(
+      items,
+      (sel): sel is parseley.Ast.SimpleSelector => true,
+      getSelectorKind
+    );
     const { matches, nonmatches, empty } = breakByKind(items, topKind);
     items = nonmatches;
     if (matches.length) {
@@ -157,25 +161,6 @@ function terminate<V> (
     }
   }
   return results;
-}
-
-function findTopKind<V> (items: AstTerminalPair<V>[]): string {
-  const kindCounters: Record<string, number> = {};
-  for (const item of items) {
-    for (const node of item.ast.list) {
-      const kind = getSelectorKind(node);
-      kindCounters[kind] = (kindCounters[kind]) ? kindCounters[kind] + 1 : 1;
-    }
-  }
-  let topKind = '';
-  let topCounter = 0;
-  for (const entry of Object.entries(kindCounters)) {
-    if (entry[1] > topCounter) {
-      topKind = entry[0];
-      topCounter = entry[1];
-    }
-  }
-  return topKind;
 }
 
 function breakByKind<V> (items: AstTerminalPair<V>[], selectedKind: string) {
@@ -367,13 +352,25 @@ function spliceAndGroup<V, S extends parseley.Ast.SimpleSelector> (
   keyCallback: (sel: S) => string
 ) {
   const groups: Record<string, SelectorsGroup<V, S>> = {};
-  for (const item of items) {
-    const splicedNode = spliceSimpleSelector(item, predicate);
-    const key = keyCallback(splicedNode);
-    if (!groups[key]) {
-      groups[key] = { oneSimpleSelector: splicedNode, items: [] };
+  while (items.length) {
+    const bestKey = findTopKey(items, predicate, keyCallback);
+    const bestKeyPredicate =
+      (sel: parseley.Ast.SimpleSelector): sel is S =>
+        predicate(sel) && keyCallback(sel) === bestKey;
+    const hasBestKeyPredicate =
+      (item: AstTerminalPair<V>) =>
+        item.ast.list.some(bestKeyPredicate);
+    const { matches, rest } = partition1(items, hasBestKeyPredicate);
+    let oneSimpleSelector: S | null = null;
+    for (const item of matches) {
+      const splicedNode = spliceSimpleSelector(item, bestKeyPredicate);
+      if (!oneSimpleSelector) { oneSimpleSelector = splicedNode; }
     }
-    groups[key].items.push(item);
+    if (oneSimpleSelector == null) {
+      throw new Error('No simple selector is found.');
+    }
+    groups[bestKey] = { oneSimpleSelector: oneSimpleSelector, items: matches };
+    items = rest;
   }
   return groups;
 }
@@ -383,12 +380,50 @@ function spliceSimpleSelector<V, S extends parseley.Ast.SimpleSelector> (
   predicate: (sel: parseley.Ast.SimpleSelector) => sel is S
 ): S {
   const simpsels = item.ast.list;
-  for (let i = 0; i < simpsels.length; i++) {
+  const matches: boolean[] = new Array<boolean>(simpsels.length);
+  let firstIndex = -1;
+  for (let i = simpsels.length; i-- > 0;) {
     if (predicate(simpsels[i])) {
-      return simpsels.splice(i, 1)[0] as S;
+      matches[i] = true;
+      firstIndex = i;
     }
   }
-  throw new Error(`Couldn't find the required simple selector. This code must be unreachable.`);
+  if (firstIndex == -1) {
+    throw new Error(`Couldn't find the required simple selector.`);
+  }
+  const result = simpsels[firstIndex];
+  item.ast.list = simpsels.filter((sel, i) => !matches[i]);
+  return result as S;
+}
+
+function findTopKey<V, S extends parseley.Ast.SimpleSelector> (
+  items: AstTerminalPair<V>[],
+  predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
+  keyCallback: (sel: S) => string
+): string {
+  const candidates: Record<string, number> = {};
+  for (const item of items) {
+    const candidates1: Record<string, boolean> = {};
+    for (const node of item.ast.list.filter(predicate)) {
+      candidates1[keyCallback(node)] = true;
+    }
+    for (const key of Object.keys(candidates1)) {
+      if (candidates[key]) {
+        candidates[key]++;
+      } else {
+        candidates[key] = 1;
+      }
+    }
+  }
+  let topKind = '';
+  let topCounter = 0;
+  for (const entry of Object.entries(candidates)) {
+    if (entry[1] > topCounter) {
+      topKind = entry[0];
+      topCounter = entry[1];
+    }
+  }
+  return topKind;
 }
 
 function partition<T, R extends T>(
@@ -396,6 +431,18 @@ function partition<T, R extends T>(
   predicate: (x: T) => x is R
 ): { matches: R[], rest: T[] } {
   const matches: R[] = [];
+  const rest: T[] = [];
+  for (const x of src) {
+    if (predicate(x)) { matches.push(x); } else { rest.push(x); }
+  }
+  return { matches, rest };
+}
+
+function partition1<T>(
+  src: T[],
+  predicate: (x: T) => boolean
+): { matches: T[], rest: T[] } {
+  const matches: T[] = [];
   const rest: T[] = [];
   for (const x of src) {
     if (predicate(x)) { matches.push(x); } else { rest.push(x); }
