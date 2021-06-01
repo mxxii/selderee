@@ -36,7 +36,7 @@
     "htmlparser2": "^6.1.0",
     "markdownlint-cli": "^0.27.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.47.0",
+    "rollup": "^2.50.5",
     "ts-node": "^9.1.1",
     "tslib": "^2.2.0",
     "typedoc": "^0.20.36",
