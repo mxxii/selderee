@@ -1,6 +1,10 @@
 {
   "name": "selderee",
   "description": "Selectors decision tree - pick matching selectors, fast",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mxxii/selderee.git"
+  },
   "author": "KillyMXI",
   "funding": "https://ko-fi.com/killymxi",
   "license": "MIT",
@@ -16,7 +20,7 @@
     "install:plugin-htmlparser2": "cd ./packages/plugin-htmlparser2/ && npm i",
     "install:selderee": "cd ./packages/selderee/ && npm i",
     "lint:eslint": "eslint .",
-    "lint:md": "markdownlint --ignore-path .gitignore .",
+    "lint:md": "markdownlint-cli2",
     "lint": "concurrently npm:lint:*",
     "postinstall": "concurrently npm:install:*",
     "prepublishOnly": "npm run checkAll",
@@ -24,24 +28,24 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.1",
-    "@tsconfig/node10": "^1.0.7",
-    "@typescript-eslint/eslint-plugin": "^4.22.1",
-    "@typescript-eslint/parser": "^4.22.1",
+    "@tsconfig/node10": "^1.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
     "ava": "^3.15.0",
-    "concurrently": "^6.0.2",
+    "concurrently": "^6.2.0",
     "copyfiles": "^2.4.1",
-    "eslint": "^7.25.0",
+    "eslint": "^7.28.0",
     "eslint-plugin-jsonc": "^1.2.1",
     "eslint-plugin-tsdoc": "^0.2.14",
     "htmlparser2": "^6.1.0",
-    "markdownlint-cli": "^0.27.1",
+    "markdownlint-cli2": "^0.1.3",
     "rimraf": "^3.0.2",
-    "rollup": "^2.47.0",
+    "rollup": "^2.51.1",
     "ts-node": "^9.1.1",
     "tslib": "^2.2.0",
     "typedoc": "^0.20.36",
-    "typedoc-plugin-markdown": "^3.8.0",
-    "typescript": "^4.2.4"
+    "typedoc-plugin-markdown": "^3.9.0",
+    "typescript": "~4.2.4"
   },
   "ava": {
     "extensions": [

@@ -32,7 +32,7 @@ tailored for specific DOM ASTs.
 
 ### constructor
 
-\+ **new DecisionTree**<V\>(`input`: [*string*, V][]): [*DecisionTree*](selderee_src_selderee.decisiontree.md)<V\>
+• **new DecisionTree**<V\>(`input`)
 
 Create new DecisionTree object.
 
@@ -46,15 +46,13 @@ Create new DecisionTree object.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `input` | [*string*, V][] | an array containing all selectors paired with associated values. |
-
-**Returns:** [*DecisionTree*](selderee_src_selderee.decisiontree.md)<V\>
+| `input` | [`string`, `V`][] | an array containing all selectors paired with associated values. |
 
 ## Methods
 
 ### build
 
-▸ **build**<R\>(`builder`: [*BuilderFunction*](../modules/selderee_src_selderee.types.md#builderfunction)<V, R\>): R
+▸ **build**<R\>(`builder`): `R`
 
 Turn this decision tree into a usable form.
 
@@ -68,8 +66,10 @@ Turn this decision tree into a usable form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `builder` | [*BuilderFunction*](../modules/selderee_src_selderee.types.md#builderfunction)<V, R\> | the builder function. |
+| `builder` | [BuilderFunction](../modules/selderee_src_selderee.types.md#builderfunction)<V, R\> | the builder function. |
 
-**Returns:** R
+#### Returns
+
+`R`
 
 the decision tree in a form ready for use.

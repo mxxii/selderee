@@ -14,7 +14,7 @@
 
 ### treeify
 
-▸ `Const` **treeify**(`nodes`: [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<string\>[]): *string*
+▸ `Const` **treeify**(`nodes`): `string`
 
 A [BuilderFunction](selderee_src_selderee.types.md#builderfunction) implementation.
 
@@ -30,8 +30,10 @@ the decision on how to stringify the value is up to you.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `nodes` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<string\>[] | nodes from the root level of the decision tree. |
+| `nodes` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<string\>[] | nodes from the root level of the decision tree. |
 
-**Returns:** *string*
+#### Returns
+
+`string`
 
 the string representation of the tree.

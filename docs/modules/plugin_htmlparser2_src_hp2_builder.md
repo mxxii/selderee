@@ -12,7 +12,7 @@
 
 ### hp2Builder
 
-▸ **hp2Builder**<V\>(`nodes`: *Ast.DecisionTreeNode*<V\>[]): *Picker*<Element, V\>
+▸ **hp2Builder**<V\>(`nodes`): `Picker`<Element, V\>
 
 A [BuilderFunction](selderee_src_selderee.types.md#builderfunction) implementation.
 
@@ -29,8 +29,10 @@ the decision tree against `htmlparser2` `Element` nodes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `nodes` | *Ast.DecisionTreeNode*<V\>[] | nodes ([DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)) from the root level of the decision tree. |
+| `nodes` | `Ast.DecisionTreeNode`<V\>[] | nodes ([DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)) from the root level of the decision tree. |
 
-**Returns:** *Picker*<Element, V\>
+#### Returns
+
+`Picker`<Element, V\>
 
 a [Picker](../classes/selderee_src_selderee.picker.md) object.

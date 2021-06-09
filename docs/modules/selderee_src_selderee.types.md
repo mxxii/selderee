@@ -15,7 +15,7 @@
 
 ### BuilderFunction
 
-Ƭ **BuilderFunction**<V, R\>: (`nodes`: [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[]) => R
+Ƭ **BuilderFunction**<V, R\>: (`nodes`: [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[]) => `R`
 
 A function that turn a decision tree into a usable form.
 
@@ -28,21 +28,23 @@ A function that turn a decision tree into a usable form.
 
 #### Type declaration
 
-▸ (`nodes`: [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[]): R
+▸ (`nodes`): `R`
 
-#### Parameters
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `nodes` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `nodes` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
 
-**Returns:** R
+##### Returns
+
+`R`
 
 ___
 
 ### MatcherFunction
 
-Ƭ **MatcherFunction**<L, V\>: (`el`: L, ...`tail`: L[]) => [*ValueContainer*](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+Ƭ **MatcherFunction**<L, V\>: (`el`: `L`, ...`tail`: `L`[]) => [ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
 
 Recommended matcher function shape to implement
 in builders.
@@ -58,13 +60,15 @@ The elements stack is represented as the arguments array.
 
 #### Type declaration
 
-▸ (`el`: L, ...`tail`: L[]): [*ValueContainer*](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+▸ (`el`, ...`tail`): [ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
 
-#### Parameters
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `el` | L |
-| `...tail` | L[] |
+| `el` | `L` |
+| `...tail` | `L`[] |
 
-**Returns:** [*ValueContainer*](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+##### Returns
+
+[ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\>[]

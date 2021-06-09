@@ -24,7 +24,7 @@
 
 ### AttrPresenceNode
 
-Ƭ **AttrPresenceNode**<V\>: *object*
+Ƭ **AttrPresenceNode**<V\>: `Object`
 
 Have to check the presence of an element attribute
 with the given name.
@@ -39,15 +39,15 @@ with the given name.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
-| `name` | *string* |
+| `cont` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `name` | `string` |
 | `type` | ``"attrPresence"`` |
 
 ___
 
 ### AttrValueNode
 
-Ƭ **AttrValueNode**<V\>: *object*
+Ƭ **AttrValueNode**<V\>: `Object`
 
 Have to check the value of an element attribute
 with the given name.
@@ -64,15 +64,15 @@ one after another.
 
 | Name | Type |
 | :------ | :------ |
-| `matchers` | [*MatcherNode*](selderee_src_selderee.ast.md#matchernode)<V\>[] |
-| `name` | *string* |
+| `matchers` | [MatcherNode](selderee_src_selderee.ast.md#matchernode)<V\>[] |
+| `name` | `string` |
 | `type` | ``"attrValue"`` |
 
 ___
 
 ### DecisionTreeNode
 
-Ƭ **DecisionTreeNode**<V\>: [*TerminalNode*](selderee_src_selderee.ast.md#terminalnode)<V\> \| [*TagNameNode*](selderee_src_selderee.ast.md#tagnamenode)<V\> \| [*AttrPresenceNode*](selderee_src_selderee.ast.md#attrpresencenode)<V\> \| [*AttrValueNode*](selderee_src_selderee.ast.md#attrvaluenode)<V\> \| [*PushElementNode*](selderee_src_selderee.ast.md#pushelementnode)<V\> \| [*PopElementNode*](selderee_src_selderee.ast.md#popelementnode)<V\>
+Ƭ **DecisionTreeNode**<V\>: [TerminalNode](selderee_src_selderee.ast.md#terminalnode)<V\> \| [TagNameNode](selderee_src_selderee.ast.md#tagnamenode)<V\> \| [AttrPresenceNode](selderee_src_selderee.ast.md#attrpresencenode)<V\> \| [AttrValueNode](selderee_src_selderee.ast.md#attrvaluenode)<V\> \| [PushElementNode](selderee_src_selderee.ast.md#pushelementnode)<V\> \| [PopElementNode](selderee_src_selderee.ast.md#popelementnode)<V\>
 
 #### Type parameters
 
@@ -84,7 +84,7 @@ ___
 
 ### MatcherNode
 
-Ƭ **MatcherNode**<V\>: *object*
+Ƭ **MatcherNode**<V\>: `Object`
 
 String value matcher.
 Contains the predicate so no need to reimplement it
@@ -100,18 +100,18 @@ from descriptive parameters.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `cont` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
 | `matcher` | ``"="`` \| ``"~="`` \| ``"\|="`` \| ``"^="`` \| ``"$="`` \| ``"*="`` |
 | `modifier` | ``"i"`` \| ``"s"`` \| ``null`` |
-| `predicate` | (`prop`: *string*) => *boolean* |
+| `predicate` | (`prop`: `string`) => `boolean` |
 | `type` | ``"matcher"`` |
-| `value` | *string* |
+| `value` | `string` |
 
 ___
 
 ### PopElementNode
 
-Ƭ **PopElementNode**<V\>: *object*
+Ƭ **PopElementNode**<V\>: `Object`
 
 Remove the top element from the stack -
 following ckecks are performed on the previous element.
@@ -126,14 +126,14 @@ following ckecks are performed on the previous element.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `cont` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
 | `type` | ``"popElement"`` |
 
 ___
 
 ### PushElementNode
 
-Ƭ **PushElementNode**<V\>: *object*
+Ƭ **PushElementNode**<V\>: `Object`
 
 Push next element on the stack, defined by the combinator.
 Only `>` and `+` are expected to be supported.
@@ -151,14 +151,14 @@ All checks are performed on the element on top of the stack.
 | Name | Type |
 | :------ | :------ |
 | `combinator` | ``">"`` \| ``"+"`` |
-| `cont` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `cont` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
 | `type` | ``"pushElement"`` |
 
 ___
 
 ### Specificity
 
-Ƭ **Specificity**: [*number*, *number*, *number*]
+Ƭ **Specificity**: [`number`, `number`, `number`]
 
 Specificity as defined by Selectors spec.
 
@@ -173,7 +173,7 @@ ___
 
 ### TagNameNode
 
-Ƭ **TagNameNode**<V\>: *object*
+Ƭ **TagNameNode**<V\>: `Object`
 
 Tag name has to be checked.
 Underlying varuants can be assembled
@@ -190,13 +190,13 @@ into a dictionary key check.
 | Name | Type |
 | :------ | :------ |
 | `type` | ``"tagName"`` |
-| `variants` | [*VariantNode*](selderee_src_selderee.ast.md#variantnode)<V\>[] |
+| `variants` | [VariantNode](selderee_src_selderee.ast.md#variantnode)<V\>[] |
 
 ___
 
 ### TerminalNode
 
-Ƭ **TerminalNode**<V\>: *object*
+Ƭ **TerminalNode**<V\>: `Object`
 
 When reached a terminal node, decision tree adds
 the value container to the list of successful matches.
@@ -212,13 +212,13 @@ the value container to the list of successful matches.
 | Name | Type |
 | :------ | :------ |
 | `type` | ``"terminal"`` |
-| `valueContainer` | [*ValueContainer*](selderee_src_selderee.ast.md#valuecontainer)<V\> |
+| `valueContainer` | [ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\> |
 
 ___
 
 ### ValueContainer
 
-Ƭ **ValueContainer**<V\>: *object*
+Ƭ **ValueContainer**<V\>: `Object`
 
 Container for the associated value,
 selector specificity and position in the selectors collection.
@@ -233,15 +233,15 @@ selector specificity and position in the selectors collection.
 
 | Name | Type |
 | :------ | :------ |
-| `index` | *number* |
-| `specificity` | [*Specificity*](selderee_src_selderee.ast.md#specificity) |
-| `value` | V |
+| `index` | `number` |
+| `specificity` | [Specificity](selderee_src_selderee.ast.md#specificity) |
+| `value` | `V` |
 
 ___
 
 ### VariantNode
 
-Ƭ **VariantNode**<V\>: *object*
+Ƭ **VariantNode**<V\>: `Object`
 
 String value variant.
 
@@ -255,6 +255,6 @@ String value variant.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [*DecisionTreeNode*](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `cont` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
 | `type` | ``"variant"`` |
-| `value` | *string* |
+| `value` | `string` |
