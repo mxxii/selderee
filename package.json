@@ -30,7 +30,7 @@
     "@rollup/plugin-typescript": "^8.2.1",
     "@tsconfig/node10": "^1.0.8",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
+    "@typescript-eslint/parser": "^4.28.1",
     "ava": "^3.15.0",
     "concurrently": "^6.2.0",
     "copyfiles": "^2.4.1",
