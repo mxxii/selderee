@@ -8,7 +8,7 @@
 
 ### Functions
 
-- [treeify](selderee_src_selderee.treeify.md#treeify)
+- [treeify](selderee_src_selderee.Treeify.md#treeify)
 
 ## Functions
 
@@ -16,13 +16,13 @@
 
 ▸ `Const` **treeify**(`nodes`): `string`
 
-A [BuilderFunction](selderee_src_selderee.types.md#builderfunction) implementation.
+A [BuilderFunction](selderee_src_selderee.Types.md#builderfunction) implementation.
 
 Produces a string representation of the tree
 for testing and debug purposes.
 
 Only accepts `string` as the associated value type.
-Map your input collection before creating a [DecisionTree](../classes/selderee_src_selderee.decisiontree.md)
+Map your input collection before creating a [DecisionTree](../classes/selderee_src_selderee.DecisionTree.md)
 if you want to use it with a different type -
 the decision on how to stringify the value is up to you.
 
@@ -30,7 +30,7 @@ the decision on how to stringify the value is up to you.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `nodes` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<string\>[] | nodes from the root level of the decision tree. |
+| `nodes` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`string`\>[] | nodes from the root level of the decision tree. |
 
 #### Returns
 

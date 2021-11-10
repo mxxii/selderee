@@ -8,33 +8,33 @@
 
 ### Type aliases
 
-- [BuilderFunction](selderee_src_selderee.types.md#builderfunction)
-- [MatcherFunction](selderee_src_selderee.types.md#matcherfunction)
+- [BuilderFunction](selderee_src_selderee.Types.md#builderfunction)
+- [MatcherFunction](selderee_src_selderee.Types.md#matcherfunction)
 
 ## Type aliases
 
 ### BuilderFunction
 
-Ƭ **BuilderFunction**<V, R\>: (`nodes`: [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[]) => `R`
-
-A function that turn a decision tree into a usable form.
+Ƭ **BuilderFunction**<`V`, `R`\>: (`nodes`: [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[]) => `R`
 
 #### Type parameters
 
 | Name | Description |
 | :------ | :------ |
 | `V` | the type of associated value. |
-| `R` | return type for this builder (Consider using [Picker](../classes/selderee_src_selderee.picker.md).) |
+| `R` | return type for this builder (Consider using [Picker](../classes/selderee_src_selderee.Picker.md).) |
 
 #### Type declaration
 
 ▸ (`nodes`): `R`
 
+A function that turn a decision tree into a usable form.
+
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `nodes` | [DecisionTreeNode](selderee_src_selderee.ast.md#decisiontreenode)<V\>[] |
+| `nodes` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[] |
 
 ##### Returns
 
@@ -44,12 +44,7 @@ ___
 
 ### MatcherFunction
 
-Ƭ **MatcherFunction**<L, V\>: (`el`: `L`, ...`tail`: `L`[]) => [ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
-
-Recommended matcher function shape to implement
-in builders.
-
-The elements stack is represented as the arguments array.
+Ƭ **MatcherFunction**<`L`, `V`\>: (`el`: `L`, ...`tail`: `L`[]) => [`ValueContainer`](selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]
 
 #### Type parameters
 
@@ -60,7 +55,12 @@ The elements stack is represented as the arguments array.
 
 #### Type declaration
 
-▸ (`el`, ...`tail`): [ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+▸ (`el`, ...`tail`): [`ValueContainer`](selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]
+
+Recommended matcher function shape to implement
+in builders.
+
+The elements stack is represented as the arguments array.
 
 ##### Parameters
 
@@ -71,4 +71,4 @@ The elements stack is represented as the arguments array.
 
 ##### Returns
 
-[ValueContainer](selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+[`ValueContainer`](selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]

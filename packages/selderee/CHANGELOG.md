@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.7.0
+
+* Drop Node.js version 10 support. At least 12.22.x is required.
+
 ## Version 0.6.0
 
 * Give priority to more common attribute values (Previously the first matching simple selector was taken instead);

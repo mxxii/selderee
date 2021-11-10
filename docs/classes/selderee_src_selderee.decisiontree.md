@@ -22,17 +22,17 @@ tailored for specific DOM ASTs.
 
 ### Constructors
 
-- [constructor](selderee_src_selderee.decisiontree.md#constructor)
+- [constructor](selderee_src_selderee.DecisionTree.md#constructor)
 
 ### Methods
 
-- [build](selderee_src_selderee.decisiontree.md#build)
+- [build](selderee_src_selderee.DecisionTree.md#build)
 
 ## Constructors
 
 ### constructor
 
-• **new DecisionTree**<V\>(`input`)
+• **new DecisionTree**<`V`\>(`input`)
 
 Create new DecisionTree object.
 
@@ -52,7 +52,7 @@ Create new DecisionTree object.
 
 ### build
 
-▸ **build**<R\>(`builder`): `R`
+▸ **build**<`R`\>(`builder`): `R`
 
 Turn this decision tree into a usable form.
 
@@ -66,7 +66,7 @@ Turn this decision tree into a usable form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `builder` | [BuilderFunction](../modules/selderee_src_selderee.types.md#builderfunction)<V, R\> | the builder function. |
+| `builder` | [`BuilderFunction`](../modules/selderee_src_selderee.Types.md#builderfunction)<`V`, `R`\> | the builder function. |
 
 #### Returns
 

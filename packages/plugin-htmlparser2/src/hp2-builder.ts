@@ -27,7 +27,7 @@ function handleArray<V>(
 ): Types.MatcherFunction<Element, V> {
   const matchers = nodes.map(handleNode);
   return (el: Element, ...tail: Element[]) =>
-    flatMap(matchers, m => m(el, ...tail));
+    matchers.flatMap(m => m(el, ...tail));
 }
 
 function handleNode<V>(
@@ -93,7 +93,7 @@ function handleAttrValueName<V>(
   return (el: Element, ...tail: Element[]) => {
     const attr = el.attribs[attrName];
     return (attr || attr === '')
-      ? flatMap(callbacks, cb => cb(attr, el, ...tail))
+      ? callbacks.flatMap(cb => cb(attr, el, ...tail))
       : [];
   };
 }
@@ -129,18 +129,4 @@ function handlePopElementNode<V>(
   const continuation = handleArray(node.cont);
   return (el: Element, next: Element, ...tail: Element[]) =>
     continuation(next, ...tail);
-}
-
-// Can be removed after transition to Node 12.
-function flatMap<T,R>(items: T[], mapper: (item: T) => R[]): R[] {
-  return ([] as R[]).concat(...amap(items, mapper));
-}
-
-function amap<T, R>(items: T[], mapper: (item: T) => R): R[] {
-  const len = items.length;
-  const res = new Array<R>(len);
-  for(let i = 0; i < len; i++) {
-    res[i] = mapper(items[i]);
-  }
-  return res;
 }

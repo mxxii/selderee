@@ -6,11 +6,11 @@
 
 ### Namespaces
 
-- [Ast](selderee_src_selderee.ast.md)
-- [Treeify](selderee_src_selderee.treeify.md)
-- [Types](selderee_src_selderee.types.md)
+- [Ast](selderee_src_selderee.Ast.md)
+- [Treeify](selderee_src_selderee.Treeify.md)
+- [Types](selderee_src_selderee.Types.md)
 
 ### Classes
 
-- [DecisionTree](../classes/selderee_src_selderee.decisiontree.md)
-- [Picker](../classes/selderee_src_selderee.picker.md)
+- [DecisionTree](../classes/selderee_src_selderee.DecisionTree.md)
+- [Picker](../classes/selderee_src_selderee.Picker.md)

@@ -18,18 +18,18 @@ Recommended return type for builder plugins.
 
 ### Constructors
 
-- [constructor](selderee_src_selderee.picker.md#constructor)
+- [constructor](selderee_src_selderee.Picker.md#constructor)
 
 ### Methods
 
-- [pick1](selderee_src_selderee.picker.md#pick1)
-- [pickAll](selderee_src_selderee.picker.md#pickall)
+- [pick1](selderee_src_selderee.Picker.md#pick1)
+- [pickAll](selderee_src_selderee.Picker.md#pickall)
 
 ## Constructors
 
 ### constructor
 
-• **new Picker**<L, V\>(`f`)
+• **new Picker**<`L`, `V`\>(`f`)
 
 Create new Picker object.
 
@@ -44,7 +44,7 @@ Create new Picker object.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `f` | [MatcherFunction](../modules/selderee_src_selderee.types.md#matcherfunction)<L, V\> | the function that matches an element and returns all associated values. |
+| `f` | [`MatcherFunction`](../modules/selderee_src_selderee.Types.md#matcherfunction)<`L`, `V`\> | the function that matches an element and returns all associated values. |
 
 ## Methods
 
@@ -53,27 +53,27 @@ Create new Picker object.
 ▸ **pick1**(`el`, `preferFirst?`): ``null`` \| `V`
 
 Run the selectors decision tree against one HTML Element
-and choose the value from the most specific mached selector.
+and choose the value from the most specific matched selector.
 
 #### Parameters
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `el` | `L` | `undefined` | an HTML Element. |
-| `preferFirst` | `boolean` | false | option to define which value to choose when there are multiple matches with equal specificity. |
+| `preferFirst` | `boolean` | `false` | option to define which value to choose when there are multiple matches with equal specificity. |
 
 #### Returns
 
 ``null`` \| `V`
 
-the value from the most specific mached selector
+the value from the most specific matched selector
 or `null` if nothing matched.
 
 ___
 
 ### pickAll
 
-▸ **pickAll**(`el`): [ValueContainer](../modules/selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+▸ **pickAll**(`el`): [`ValueContainer`](../modules/selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]
 
 Run the selectors decision tree against one HTML Element
 and return all matched associated values
@@ -90,7 +90,7 @@ Client code then decides how to further process them
 
 #### Returns
 
-[ValueContainer](../modules/selderee_src_selderee.ast.md#valuecontainer)<V\>[]
+[`ValueContainer`](../modules/selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]
 
 all associated values along with
 selector specificities for all matched selectors.

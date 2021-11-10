@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node10/tsconfig.json",
+  "extends": "@tsconfig/node12/tsconfig.json",
   "include": [
     "packages/*/src/**/*.ts"
   ],
@@ -11,6 +11,7 @@
       "./packages/plugin-htmlparser2/src/hp2-builder.ts"
     ],
     "excludePrivate": true,
+    "githubPages": false,
     "hideBreadcrumbs": false,
     "includeVersion": false,
     "name": "API documentation",
