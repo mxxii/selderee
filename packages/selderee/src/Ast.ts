@@ -34,7 +34,7 @@ export type TerminalNode<V> = {
 
 /**
  * Tag name has to be checked.
- * Underlying varuants can be assembled
+ * Underlying variants can be assembled
  * into a dictionary key check.
  */
 export type TagNameNode<V> = {
@@ -101,7 +101,7 @@ export type PushElementNode<V> = {
 
 /**
  * Remove the top element from the stack -
- * following ckecks are performed on the previous element.
+ * following checks are performed on the previous element.
  */
 export type PopElementNode<V> = {
   type: 'popElement',

@@ -140,6 +140,6 @@ console.log(`Best matched value: ${bestMatch}`);
 Best matched value: E
 ```
 
-*Some gotcha: you may notice the check for `#baz` has to be performed every time the decision tree is called. If it happens to be `p#baz` or `div#baz` or even `.foo#baz` - it would be much better to write it like this. Deeper, narrower tree means less checks on average. (in case of `.foo#baz` the class check might finally outweight the tag name check and rebalance the tree.)*
+*Some gotcha: you may notice the check for `#baz` has to be performed every time the decision tree is called. If it happens to be `p#baz` or `div#baz` or even `.foo#baz` - it would be much better to write it like this. Deeper, narrower tree means less checks on average. (in case of `.foo#baz` the class check might finally outweigh the tag name check and rebalance the tree.)*
 
 </details>

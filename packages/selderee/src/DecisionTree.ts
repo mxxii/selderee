@@ -241,7 +241,7 @@ function attrPresenceBranch<V> (
   items: AstTerminalPair<V>[]
 ): Ast.AttrPresenceNode<V> {
   for (const item of items) {
-    spliceSimpleSelector(item, (x): x is parseley.Ast.AttrabutePresenceSelector => (x.type === 'attrPresence') && (x.name === name));
+    spliceSimpleSelector(item, (x): x is parseley.Ast.AttributePresenceSelector => (x.type === 'attrPresence') && (x.name === name));
   }
   return {
     type: 'attrPresence',
@@ -256,7 +256,7 @@ function attrValueBranch<V> (
 ): Ast.AttrValueNode<V> {
   const groups = spliceAndGroup(
     items,
-    (x): x is parseley.Ast.AttrabuteValueSelector => (x.type === 'attrValue') && (x.name === name),
+    (x): x is parseley.Ast.AttributeValueSelector => (x.type === 'attrValue') && (x.name === name),
     (x) => `${x.matcher} ${x.modifier || ''} ${x.value}`
   );
   const matchers: Ast.MatcherNode<V>[] = [];
@@ -281,7 +281,7 @@ function attrValueBranch<V> (
 }
 
 function getAttrPredicate (
-  sel: parseley.Ast.AttrabuteValueSelector
+  sel: parseley.Ast.AttributeValueSelector
 ): (actual: string) => boolean {
   if (sel.modifier === 'i') {
     const expected = sel.value.toLowerCase();

@@ -45,14 +45,14 @@ export class Picker<L,V> {
 
   /**
    * Run the selectors decision tree against one HTML Element
-   * and choose the value from the most specific mached selector.
+   * and choose the value from the most specific matched selector.
    *
    * @param el - an HTML Element.
    *
    * @param preferFirst - option to define which value to choose
    * when there are multiple matches with equal specificity.
    *
-   * @returns the value from the most specific mached selector
+   * @returns the value from the most specific matched selector
    * or `null` if nothing matched.
    */
   pick1 (
