@@ -41,6 +41,6 @@
     "selderee": "^0.7.0"
   },
   "devDependencies": {
-    "htmlparser2": "^7.1.2"
+    "htmlparser2": "^7.2.0"
   }
 }
