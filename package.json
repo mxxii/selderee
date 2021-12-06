@@ -24,7 +24,7 @@
     "lint": "concurrently npm:lint:*",
     "postinstall": "concurrently npm:install:*",
     "prepublishOnly": "npm run checkAll",
-    "test": "ava"
+    "test": "ava --timeout=20s"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
@@ -34,13 +34,14 @@
     "ava": "^3.15.0",
     "concurrently": "^6.4.0",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.3.0",
+    "eslint": "^8.4.0",
     "eslint-plugin-jsonc": "^2.0.0",
     "eslint-plugin-tsdoc": "^0.2.14",
     "htmlparser2": "^7.2.0",
     "markdownlint-cli2": "^0.3.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.60.2",
+    "rollup-plugin-cleanup": "^3.2.1",
     "ts-node": "^9.1.1",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.10",
