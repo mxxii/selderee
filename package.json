@@ -14,9 +14,10 @@
   ],
   "scripts": {
     "build:docs": "typedoc",
-    "build:plugin-htmlparser2": "npm run build -w ./packages/plugin-htmlparser2",
     "build:selderee": "npm run build -w ./packages/selderee",
-    "build": "npm run copy:readme && npm run build:selderee && npm run build:plugin-htmlparser2 && npm run build:docs",
+    "build:plugin-htmlparser2": "npm run build -w ./packages/plugin-htmlparser2",
+    "build:packages": "npm run build:selderee && npm run build:plugin-htmlparser2",
+    "build": "npm run copy:readme && npm run build:packages && npm run build:docs",
     "checkAll": "npm run lint && npm test",
     "copy:readme": "copyfiles README.md packages/selderee/",
     "example": "node ./example/example.cjs",
@@ -24,7 +25,7 @@
     "lint:md": "markdownlint-cli2",
     "lint": "npm run lint:eslint && npm run lint:md",
     "prepublishOnly": "npm run checkAll",
-    "pretest": "npm run build --workspaces",
+    "pretest": "npm run build:packages",
     "test": "ava --timeout=20s"
   },
   "devDependencies": {
