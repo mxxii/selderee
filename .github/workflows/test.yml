@@ -34,8 +34,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Setup NPM v7.20.2
-        run: npm install -g npm@7.20.2
+      - name: Setup NPM v7
+        run: npm install -g npm@7
 
       - name: Log NPM version
         run: |
@@ -43,5 +43,10 @@ jobs:
           npm list -g --depth 0
 
       - run: npm ci
+
+      - name: List node modules
+        run: |
+          ls -l ./node_modules/*selderee* &&
+          ls -l ./node_modules/@selderee
 
       - run: npm test

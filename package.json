@@ -16,7 +16,7 @@
     "build:docs": "typedoc",
     "build:plugin-htmlparser2": "npm run build -w ./packages/plugin-htmlparser2",
     "build:selderee": "npm run build -w ./packages/selderee",
-    "build": "npm run copy:readme && npm run build --workspaces && npm run build:docs",
+    "build": "npm run copy:readme && npm run build:selderee && npm run build:plugin-htmlparser2 && npm run build:docs",
     "checkAll": "npm run lint && npm test",
     "copy:readme": "copyfiles README.md packages/selderee/",
     "example": "node ./example/example.cjs",
