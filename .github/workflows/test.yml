@@ -8,8 +8,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [12, 16]
         os: [ubuntu-latest, windows-latest]
+        exclude:
+          - node-version: 12
+            os: windows-latest
 
     runs-on: ${{ matrix.os }}
 
@@ -35,6 +38,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Setup NPM v7
+        if: ${{ matrix.node-version < 15 }}
         run: |
           npm install -g npm@7 &&
           npm --version &&

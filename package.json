@@ -24,6 +24,7 @@
     "lint:md": "markdownlint-cli2",
     "lint": "npm run lint:eslint && npm run lint:md",
     "prepublishOnly": "npm run checkAll",
+    "pretest": "npm run build --workspaces",
     "test": "ava --timeout=20s"
   },
   "devDependencies": {
@@ -49,7 +50,9 @@
   },
   "ava": {
     "extensions": {
-      "ts": "module"
+      "ts": "module",
+      "mjs": true,
+      "cjs": true
     },
     "files": [
       "packages/*/test/**/*"
