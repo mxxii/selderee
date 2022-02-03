@@ -21,9 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Setup NPM v7
-        run: npm i -g npm@7
-
       - name: Get npm cache directory
         id: npm-cache-dir
         run: |
@@ -36,6 +33,12 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Setup NPM v7
+        run: |
+          npm install -g npm@7 &&
+          npm --version &&
+          npm list -g --depth 0
 
       - run: npm ci
 
