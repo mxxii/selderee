@@ -1,24 +1,24 @@
-[API documentation](../index.md) / [selderee/src/selderee](selderee_src_selderee.md) / Ast
+[API documentation](../index.md) / [selderee](selderee.md) / Ast
 
 # Namespace: Ast
 
-[selderee/src/selderee](selderee_src_selderee.md).Ast
+[selderee](selderee.md).Ast
 
 ## Table of contents
 
 ### Type aliases
 
-- [AttrPresenceNode](selderee_src_selderee.Ast.md#attrpresencenode)
-- [AttrValueNode](selderee_src_selderee.Ast.md#attrvaluenode)
-- [DecisionTreeNode](selderee_src_selderee.Ast.md#decisiontreenode)
-- [MatcherNode](selderee_src_selderee.Ast.md#matchernode)
-- [PopElementNode](selderee_src_selderee.Ast.md#popelementnode)
-- [PushElementNode](selderee_src_selderee.Ast.md#pushelementnode)
-- [Specificity](selderee_src_selderee.Ast.md#specificity)
-- [TagNameNode](selderee_src_selderee.Ast.md#tagnamenode)
-- [TerminalNode](selderee_src_selderee.Ast.md#terminalnode)
-- [ValueContainer](selderee_src_selderee.Ast.md#valuecontainer)
-- [VariantNode](selderee_src_selderee.Ast.md#variantnode)
+- [AttrPresenceNode](selderee.Ast.md#attrpresencenode)
+- [AttrValueNode](selderee.Ast.md#attrvaluenode)
+- [DecisionTreeNode](selderee.Ast.md#decisiontreenode)
+- [MatcherNode](selderee.Ast.md#matchernode)
+- [PopElementNode](selderee.Ast.md#popelementnode)
+- [PushElementNode](selderee.Ast.md#pushelementnode)
+- [Specificity](selderee.Ast.md#specificity)
+- [TagNameNode](selderee.Ast.md#tagnamenode)
+- [TerminalNode](selderee.Ast.md#terminalnode)
+- [ValueContainer](selderee.Ast.md#valuecontainer)
+- [VariantNode](selderee.Ast.md#variantnode)
 
 ## Type aliases
 
@@ -39,7 +39,7 @@ with the given name.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[] |
+| `cont` | [`DecisionTreeNode`](selderee.Ast.md#decisiontreenode)<`V`\>[] |
 | `name` | `string` |
 | `type` | ``"attrPresence"`` |
 
@@ -64,7 +64,7 @@ one after another.
 
 | Name | Type |
 | :------ | :------ |
-| `matchers` | [`MatcherNode`](selderee_src_selderee.Ast.md#matchernode)<`V`\>[] |
+| `matchers` | [`MatcherNode`](selderee.Ast.md#matchernode)<`V`\>[] |
 | `name` | `string` |
 | `type` | ``"attrValue"`` |
 
@@ -72,7 +72,7 @@ ___
 
 ### DecisionTreeNode
 
-Ƭ **DecisionTreeNode**<`V`\>: [`TerminalNode`](selderee_src_selderee.Ast.md#terminalnode)<`V`\> \| [`TagNameNode`](selderee_src_selderee.Ast.md#tagnamenode)<`V`\> \| [`AttrPresenceNode`](selderee_src_selderee.Ast.md#attrpresencenode)<`V`\> \| [`AttrValueNode`](selderee_src_selderee.Ast.md#attrvaluenode)<`V`\> \| [`PushElementNode`](selderee_src_selderee.Ast.md#pushelementnode)<`V`\> \| [`PopElementNode`](selderee_src_selderee.Ast.md#popelementnode)<`V`\>
+Ƭ **DecisionTreeNode**<`V`\>: [`TerminalNode`](selderee.Ast.md#terminalnode)<`V`\> \| [`TagNameNode`](selderee.Ast.md#tagnamenode)<`V`\> \| [`AttrPresenceNode`](selderee.Ast.md#attrpresencenode)<`V`\> \| [`AttrValueNode`](selderee.Ast.md#attrvaluenode)<`V`\> \| [`PushElementNode`](selderee.Ast.md#pushelementnode)<`V`\> \| [`PopElementNode`](selderee.Ast.md#popelementnode)<`V`\>
 
 #### Type parameters
 
@@ -100,7 +100,7 @@ from descriptive parameters.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[] |
+| `cont` | [`DecisionTreeNode`](selderee.Ast.md#decisiontreenode)<`V`\>[] |
 | `matcher` | ``"="`` \| ``"~="`` \| ``"\|="`` \| ``"^="`` \| ``"$="`` \| ``"*="`` |
 | `modifier` | ``"i"`` \| ``"s"`` \| ``null`` |
 | `type` | ``"matcher"`` |
@@ -126,7 +126,7 @@ following checks are performed on the previous element.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[] |
+| `cont` | [`DecisionTreeNode`](selderee.Ast.md#decisiontreenode)<`V`\>[] |
 | `type` | ``"popElement"`` |
 
 ___
@@ -151,7 +151,7 @@ All checks are performed on the element on top of the stack.
 | Name | Type |
 | :------ | :------ |
 | `combinator` | ``">"`` \| ``"+"`` |
-| `cont` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[] |
+| `cont` | [`DecisionTreeNode`](selderee.Ast.md#decisiontreenode)<`V`\>[] |
 | `type` | ``"pushElement"`` |
 
 ___
@@ -190,7 +190,7 @@ into a dictionary key check.
 | Name | Type |
 | :------ | :------ |
 | `type` | ``"tagName"`` |
-| `variants` | [`VariantNode`](selderee_src_selderee.Ast.md#variantnode)<`V`\>[] |
+| `variants` | [`VariantNode`](selderee.Ast.md#variantnode)<`V`\>[] |
 
 ___
 
@@ -212,7 +212,7 @@ the value container to the list of successful matches.
 | Name | Type |
 | :------ | :------ |
 | `type` | ``"terminal"`` |
-| `valueContainer` | [`ValueContainer`](selderee_src_selderee.Ast.md#valuecontainer)<`V`\> |
+| `valueContainer` | [`ValueContainer`](selderee.Ast.md#valuecontainer)<`V`\> |
 
 ___
 
@@ -234,7 +234,7 @@ selector specificity and position in the selectors collection.
 | Name | Type |
 | :------ | :------ |
 | `index` | `number` |
-| `specificity` | [`Specificity`](selderee_src_selderee.Ast.md#specificity) |
+| `specificity` | [`Specificity`](selderee.Ast.md#specificity) |
 | `value` | `V` |
 
 ___
@@ -255,6 +255,6 @@ String value variant.
 
 | Name | Type |
 | :------ | :------ |
-| `cont` | [`DecisionTreeNode`](selderee_src_selderee.Ast.md#decisiontreenode)<`V`\>[] |
+| `cont` | [`DecisionTreeNode`](selderee.Ast.md#decisiontreenode)<`V`\>[] |
 | `type` | ``"variant"`` |
 | `value` | `string` |

@@ -1,8 +1,8 @@
 const htmlparser2 = require('htmlparser2');
 const util = require('util');
 
-const { DecisionTree, Treeify } = require('../packages/selderee/lib/selderee.cjs');
-const { hp2Builder } = require('../packages/plugin-htmlparser2/lib/hp2-builder.cjs');
+const { DecisionTree, Treeify } = require('selderee');
+const { hp2Builder } = require('@selderee/plugin-htmlparser2');
 
 const selectorValuePairs = [
   ['p', 'A'],

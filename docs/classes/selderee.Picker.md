@@ -1,8 +1,8 @@
-[API documentation](../index.md) / [selderee/src/selderee](../modules/selderee_src_selderee.md) / Picker
+[API documentation](../index.md) / [selderee](../modules/selderee.md) / Picker
 
 # Class: Picker<L, V\>
 
-[selderee/src/selderee](../modules/selderee_src_selderee.md).Picker
+[selderee](../modules/selderee.md).Picker
 
 Simple wrapper around the matcher function.
 Recommended return type for builder plugins.
@@ -18,12 +18,12 @@ Recommended return type for builder plugins.
 
 ### Constructors
 
-- [constructor](selderee_src_selderee.Picker.md#constructor)
+- [constructor](selderee.Picker.md#constructor)
 
 ### Methods
 
-- [pick1](selderee_src_selderee.Picker.md#pick1)
-- [pickAll](selderee_src_selderee.Picker.md#pickall)
+- [pick1](selderee.Picker.md#pick1)
+- [pickAll](selderee.Picker.md#pickall)
 
 ## Constructors
 
@@ -44,7 +44,7 @@ Create new Picker object.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `f` | [`MatcherFunction`](../modules/selderee_src_selderee.Types.md#matcherfunction)<`L`, `V`\> | the function that matches an element and returns all associated values. |
+| `f` | [`MatcherFunction`](../modules/selderee.Types.md#matcherfunction)<`L`, `V`\> | the function that matches an element and returns all associated values. |
 
 ## Methods
 
@@ -73,7 +73,7 @@ ___
 
 ### pickAll
 
-▸ **pickAll**(`el`): [`ValueContainer`](../modules/selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]
+▸ **pickAll**(`el`): [`ValueContainer`](../modules/selderee.Ast.md#valuecontainer)<`V`\>[]
 
 Run the selectors decision tree against one HTML Element
 and return all matched associated values
@@ -90,7 +90,7 @@ Client code then decides how to further process them
 
 #### Returns
 
-[`ValueContainer`](../modules/selderee_src_selderee.Ast.md#valuecontainer)<`V`\>[]
+[`ValueContainer`](../modules/selderee.Ast.md#valuecontainer)<`V`\>[]
 
 all associated values along with
 selector specificities for all matched selectors.

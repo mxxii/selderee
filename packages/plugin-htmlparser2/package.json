@@ -1,6 +1,6 @@
 {
   "name": "@selderee/plugin-htmlparser2",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "selderee plugin - selectors decision tree builder for htmlparser2 DOM.",
   "keywords": [
     "htmlparser2",
@@ -27,6 +27,7 @@
   "main": "./lib/hp2-builder.cjs",
   "module": "./lib/hp2-builder.mjs",
   "types": "./lib/hp2-builder.d.ts",
+  "typedocMain": "./src/hp2-builder.ts",
   "files": [
     "lib"
   ],
@@ -38,7 +39,7 @@
   },
   "dependencies": {
     "domhandler": "^4.2.2",
-    "selderee": "^0.8.1"
+    "selderee": "^0.9.0"
   },
   "devDependencies": {
     "htmlparser2": "^7.2.0"

@@ -1,8 +1,8 @@
-[API documentation](../index.md) / [selderee/src/selderee](../modules/selderee_src_selderee.md) / DecisionTree
+[API documentation](../index.md) / [selderee](../modules/selderee.md) / DecisionTree
 
 # Class: DecisionTree<V\>
 
-[selderee/src/selderee](../modules/selderee_src_selderee.md).DecisionTree
+[selderee](../modules/selderee.md).DecisionTree
 
 CSS selectors decision tree.
 Data structure that weaves similar selectors together
@@ -22,11 +22,11 @@ tailored for specific DOM ASTs.
 
 ### Constructors
 
-- [constructor](selderee_src_selderee.DecisionTree.md#constructor)
+- [constructor](selderee.DecisionTree.md#constructor)
 
 ### Methods
 
-- [build](selderee_src_selderee.DecisionTree.md#build)
+- [build](selderee.DecisionTree.md#build)
 
 ## Constructors
 
@@ -66,7 +66,7 @@ Turn this decision tree into a usable form.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `builder` | [`BuilderFunction`](../modules/selderee_src_selderee.Types.md#builderfunction)<`V`, `R`\> | the builder function. |
+| `builder` | [`BuilderFunction`](../modules/selderee.Types.md#builderfunction)<`V`, `R`\> | the builder function. |
 
 #### Returns
 

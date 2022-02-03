@@ -3,13 +3,19 @@
   "include": [
     "packages/*/src/**/*.ts"
   ],
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "paths": {
+      "selderee/*": ["./packages/selderee/src/*"],
+    }
+  },
   "typedocOptions": {
     "disableSources": true,
     "entryDocument": "index.md",
     "entryPoints": [
-      "./packages/selderee/src/selderee.ts",
-      "./packages/plugin-htmlparser2/src/hp2-builder.ts"
+      "./packages/*"
     ],
+    "entryPointStrategy": "packages",
     "excludePrivate": true,
     "githubPages": false,
     "hideBreadcrumbs": false,
@@ -17,5 +23,12 @@
     "name": "API documentation",
     "readme": "none",
     "out": "docs"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "ESNext",
+      "esModuleInterop": true,
+      "moduleResolution": "Node"
+    }
   }
 }

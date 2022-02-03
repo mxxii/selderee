@@ -3,7 +3,6 @@
 ![lint status badge](https://github.com/mxxii/selderee/workflows/lint/badge.svg)
 ![test status badge](https://github.com/mxxii/selderee/workflows/test/badge.svg)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mxxii/selderee/blob/main/LICENSE)
-![GitHub top language](https://img.shields.io/github/languages/top/mxxii/selderee)
 [![npm](https://img.shields.io/npm/dw/selderee?color=informational&logo=npm)](https://www.npmjs.com/package/selderee)
 
 **Sel**ectors **de**cision t**ree** - pick matching selectors, fast.
@@ -19,7 +18,7 @@ The naive approach is to walk through the DOM and test each and every selector a
 
 It is pretty clear though that if we have selectors that share something in common then we can reduce the number of checks.
 
-The main `selderee` package offers the tree structure. Runnable decision functions for specific DOM implementations are built via plugins.
+The main `selderee` package offers the selectors tree structure. Runnable decision functions for specific DOM implementations are built via plugins.
 
 
 ## Limitations
@@ -143,3 +142,10 @@ Best matched value: E
 *Some gotcha: you may notice the check for `#baz` has to be performed every time the decision tree is called. If it happens to be `p#baz` or `div#baz` or even `.foo#baz` - it would be much better to write it like this. Deeper, narrower tree means less checks on average. (in case of `.foo#baz` the class check might finally outweigh the tag name check and rebalance the tree.)*
 
 </details>
+
+
+## Development
+
+Targeting Node.js version >=12.22.
+
+Monorepo uses NPM v7 workspaces (make sure v7 is installed when used with Node.js v12-v14.)

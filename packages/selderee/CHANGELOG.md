@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.9.0
+
+* Bump dependencies - fix "./core module cannot be found" issue.
+
 ## Version 0.8.1
 
 * Bump `parseley` dependency to version 0.9.1 ([changelog](https://github.com/mxxii/parseley/blob/main/CHANGELOG.md)). Now all dependencies are TypeScript, dual CommonJS/ES module packages;
