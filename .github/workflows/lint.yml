@@ -29,9 +29,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Setup NPM v7
+      - name: Setup NPM v7.20.2
+        run: npm install -g npm@7.20.2
+
+      - name: Log NPM version
         run: |
-          npm install -g npm@7 &&
           npm --version &&
           npm list -g --depth 0
 

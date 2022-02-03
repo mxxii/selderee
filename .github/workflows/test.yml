@@ -8,11 +8,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12, 16]
+        node-version: [12, 14]
         os: [ubuntu-latest, windows-latest]
-        exclude:
-          - node-version: 12
-            os: windows-latest
 
     runs-on: ${{ matrix.os }}
 
@@ -37,10 +34,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Setup NPM v7
-        if: ${{ matrix.node-version < 15 }}
+      - name: Setup NPM v7.20.2
+        run: npm install -g npm@7.20.2
+
+      - name: Log NPM version
         run: |
-          npm install -g npm@7 &&
           npm --version &&
           npm list -g --depth 0
 
