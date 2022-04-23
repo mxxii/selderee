@@ -14,7 +14,7 @@
 
 ### treeify
 
-▸ `Const` **treeify**(`nodes`): `string`
+▸ **treeify**(`nodes`): `string`
 
 A [BuilderFunction](selderee.Types.md#builderfunction) implementation.
 
