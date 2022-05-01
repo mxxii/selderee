@@ -38,7 +38,7 @@
     "clean": "rimraf lib"
   },
   "dependencies": {
-    "domhandler": "^4.2.2",
+    "domhandler": "^5.0.3",
     "selderee": "^0.9.0"
   },
   "devDependencies": {
