@@ -6,12 +6,12 @@
 
 ## Table of contents
 
-### Type aliases
+### Type Aliases
 
 - [BuilderFunction](selderee.Types.md#builderfunction)
 - [MatcherFunction](selderee.Types.md#matcherfunction)
 
-## Type aliases
+## Type Aliases
 
 ### BuilderFunction
 

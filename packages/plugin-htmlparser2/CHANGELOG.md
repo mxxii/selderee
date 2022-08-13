@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* Targeting Node.js version 14 and ES2020;
+* Bump `domhandler` dependency.
+
 ## Version 0.9.0
 
 * Bump dependencies - fix "./core module cannot be found" issue.

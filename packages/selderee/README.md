@@ -98,7 +98,7 @@ const picker = selectorsDecisionTree.build(hp2Builder);
 
 // Get all matches
 const allMatches = picker.pickAll(element);
-console.log(util.inspect(allMatches, { breakLength: 50, depth: null }));
+console.log(util.inspect(allMatches, { breakLength: 70, depth: null }));
 
 // or get the value from the most specific match.
 const bestMatch = picker.pick1(element);
@@ -146,6 +146,6 @@ Best matched value: E
 
 ## Development
 
-Targeting Node.js version >=12.22.
+Targeting Node.js version >=14.
 
-Monorepo uses NPM v7 workspaces (make sure v7 is installed when used with Node.js v12-v14.)
+Monorepo uses NPM v7 workspaces (make sure v7 is installed when used with Node.js v14.)

@@ -34,7 +34,7 @@ const picker = selectorsDecisionTree.build(hp2Builder);
 
 // Get all matches
 const allMatches = picker.pickAll(element);
-console.log(util.inspect(allMatches, { breakLength: 50, depth: null }));
+console.log(util.inspect(allMatches, { breakLength: 70, depth: null }));
 
 // or get the value from the most specific match.
 const bestMatch = picker.pick1(element);

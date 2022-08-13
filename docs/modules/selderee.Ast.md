@@ -6,7 +6,7 @@
 
 ## Table of contents
 
-### Type aliases
+### Type Aliases
 
 - [AttrPresenceNode](selderee.Ast.md#attrpresencenode)
 - [AttrValueNode](selderee.Ast.md#attrvaluenode)
@@ -20,7 +20,7 @@
 - [ValueContainer](selderee.Ast.md#valuecontainer)
 - [VariantNode](selderee.Ast.md#variantnode)
 
-## Type aliases
+## Type Aliases
 
 ### AttrPresenceNode
 
