@@ -6,7 +6,8 @@
     "no-duplicate-header": { "allow_different_nesting": true },
     "no-inline-html": { "allowed_elements": ["details", "summary"] },
     "no-multiple-blanks": { "maximum": 2 },
-    "no-space-in-code": false
+    "no-space-in-code": false,
+    "reference-links-images": false
   },
   "globs": [ "**/*.md" ],
   "ignores": [ "**/node_modules" ]
