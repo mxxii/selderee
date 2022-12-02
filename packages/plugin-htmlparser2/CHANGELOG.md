@@ -1,9 +1,9 @@
 # Changelog
 
-## Unreleased
+## Version 0.10.0
 
 * Targeting Node.js version 14 and ES2020;
-* Bump `domhandler` dependency.
+* Bump dependencies.
 
 ## Version 0.9.0
 
