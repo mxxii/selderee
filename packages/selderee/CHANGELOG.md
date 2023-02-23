@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.11.0
+
+* Bump `parseley` dependency to version 0.12.0 ([changelog](https://github.com/mxxii/parseley/blob/main/CHANGELOG.md)). Escape sequences in selectors.
+
 ## Version 0.10.0
 
 * Targeting Node.js version 14 and ES2020;

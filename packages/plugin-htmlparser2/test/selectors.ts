@@ -5,7 +5,7 @@ import { DecisionTree } from 'selderee';
 import { hp2Builder } from '../src/hp2-builder';
 
 const html = /*html*/`<html><body>
-  <div><p id="A" class="foo qux">second</p><div id="B" baz>second</div></div>
+  <div><p id="A" class="foo qux .">second</p><div id="B" baz>second</div></div>
 </body></html>`;
 const dom = htmlparser2.parseDocument(html);
 
@@ -36,6 +36,8 @@ test('tag name match 2', selectorsMacro, 'B', ['div'], true);
 test('tag name non-match 1', selectorsMacro, 'A', ['div'], false);
 
 test('tag name non-match 2', selectorsMacro, 'B', ['p'], false);
+
+test('class match - escape sequence', selectorsMacro, 'A', ['.\\.'], true);
 
 test('attribute presence match 1', selectorsMacro, 'A', [
   '[class]',

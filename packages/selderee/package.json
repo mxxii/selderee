@@ -1,6 +1,6 @@
 {
   "name": "selderee",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Selectors decision tree - choose matching selectors, fast",
   "keywords": [
     "CSS",
@@ -39,6 +39,6 @@
     "clean": "rimraf lib"
   },
   "dependencies": {
-    "parseley": "^0.11.0"
+    "parseley": "^0.12.0"
   }
 }

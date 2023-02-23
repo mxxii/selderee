@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.11.0
+
+* (`selderee`) Escape sequences in selectors.
+
 ## Version 0.10.0
 
 * Targeting Node.js version 14 and ES2020;

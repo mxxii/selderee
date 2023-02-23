@@ -1,6 +1,6 @@
 {
   "name": "@selderee/plugin-htmlparser2",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "selderee plugin - selectors decision tree builder for htmlparser2 DOM.",
   "keywords": [
     "htmlparser2",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "domhandler": "^5.0.3",
-    "selderee": "^0.10.0"
+    "selderee": "^0.11.0"
   },
   "devDependencies": {
     "htmlparser2": "^8.0.1"

@@ -77,3 +77,10 @@ test('repeated simple selectors', snapshotMacro, [
   ['[foo][foo].bar.bar.bar.bar.bar', 'value 1'],
   ['[foo]', 'value 2']
 ]);
+
+test('non-ascii and escape sequences', snapshotMacro, [
+  ['#\\..♫', 'value 1'],
+  ['.👩‍🚀', 'value 2'],
+  ['.\\22 .\\2d', 'value 3'],
+  ['[\\31="\\31"]', 'value 4'],
+]);
