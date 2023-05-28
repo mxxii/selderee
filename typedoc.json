@@ -1,0 +1,15 @@
+{
+  "disableSources": true,
+  "entryDocument": "index.md",
+  "entryPoints": [
+    "./packages/*"
+  ],
+  "entryPointStrategy": "packages",
+  "excludePrivate": true,
+  "githubPages": false,
+  "hideBreadcrumbs": false,
+  "includeVersion": false,
+  "name": "API documentation",
+  "readme": "none",
+  "out": "docs"
+}

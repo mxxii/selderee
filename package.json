@@ -13,7 +13,7 @@
     "packages/selderee"
   ],
   "scripts": {
-    "build:docs": "typedoc",
+    "build:docs": "typedoc --plugin typedoc-plugin-markdown",
     "build:selderee": "npm run build -w ./packages/selderee",
     "build:plugin-htmlparser2": "npm run build -w ./packages/plugin-htmlparser2",
     "build:packages": "npm run build:selderee && npm run build:plugin-htmlparser2",
