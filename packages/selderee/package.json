@@ -39,6 +39,6 @@
     "clean": "rimraf lib"
   },
   "dependencies": {
-    "parseley": "^0.12.0"
+    "parseley": "^0.12.1"
   }
 }
