@@ -32,7 +32,7 @@
     "@rollup/plugin-typescript": "^11.1.1",
     "@tsconfig/node14": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
-    "@typescript-eslint/parser": "^5.59.7",
+    "@typescript-eslint/parser": "^5.60.1",
     "ava": "^5.3.0",
     "copyfiles": "^2.4.1",
     "eslint": "^8.41.0",
