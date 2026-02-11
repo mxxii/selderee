@@ -1,42 +1,48 @@
+/**
+ * Decision tree builder for [htmlparser2](https://github.com/fb55/htmlparser2)/[domhandler](https://github.com/fb55/domhandler) DOM AST.
+ *
+ * @packageDocumentation
+ */
+
 import { Element, Node, isTag } from 'domhandler';
-import { Picker, Types, Ast } from 'selderee';
+import { Picker, type Types, type Ast } from 'selderee';
 
 /**
- * A {@link BuilderFunction} implementation.
+ * A {@link Types.BuilderFunction} implementation.
  *
  * Creates a function (in a {@link Picker} wrapper) that can run
- * the decision tree against `htmlparser2` `Element` nodes.
+ * the decision tree against `htmlparser2`/`domhandler` {@link Element} nodes.
  *
  * @typeParam V - the type of values associated with selectors.
  *
- * @param nodes - nodes ({@link DecisionTreeNode})
+ * @param nodes - nodes ({@link Ast.DecisionTreeNode})
  * from the root level of the decision tree.
  *
  * @returns a {@link Picker} object.
  */
-export function hp2Builder<V>(
-  nodes: Ast.DecisionTreeNode<V>[]
+export function hp2Builder<V> (
+  nodes: Ast.DecisionTreeNode<V>[],
 ): Picker<Element, V> {
   return new Picker(handleArray(nodes));
 }
 
 // ==============================================
 
-function handleArray<V>(
-  nodes: Ast.DecisionTreeNode<V>[]
+function handleArray<V> (
+  nodes: Ast.DecisionTreeNode<V>[],
 ): Types.MatcherFunction<Element, V> {
   const matchers = nodes.map(handleNode);
   return (el: Element, ...tail: Element[]) =>
     matchers.flatMap(m => m(el, ...tail));
 }
 
-function handleNode<V>(
-  node: Ast.DecisionTreeNode<V>
+function handleNode<V> (
+  node: Ast.DecisionTreeNode<V>,
 ): Types.MatcherFunction<Element, V> {
   switch (node.type) {
     case 'terminal':{
       const result = [ node.valueContainer ];
-      return (el: Element, ...tail: Element[]) => result;
+      return () => result;
     }
     case 'tagName':
       return handleTagName(node);
@@ -51,8 +57,8 @@ function handleNode<V>(
   }
 }
 
-function handleTagName<V>(
-  node: Ast.TagNameNode<V>
+function handleTagName<V> (
+  node: Ast.TagNameNode<V>,
 ): Types.MatcherFunction<Element, V> {
   const variants: Record<string, Types.MatcherFunction<Element, V>> = {};
   for (const variant of node.variants) {
@@ -64,8 +70,8 @@ function handleTagName<V>(
   };
 }
 
-function handleAttrPresenceName<V>(
-  node: Ast.AttrPresenceNode<V>
+function handleAttrPresenceName<V> (
+  node: Ast.AttrPresenceNode<V>,
 ): Types.MatcherFunction<Element, V> {
   const attrName = node.name;
   const continuation = handleArray(node.cont);
@@ -75,18 +81,18 @@ function handleAttrPresenceName<V>(
       : [];
 }
 
-function handleAttrValueName<V>(
-  node: Ast.AttrValueNode<V>
+function handleAttrValueName<V> (
+  node: Ast.AttrValueNode<V>,
 ): Types.MatcherFunction<Element, V> {
   const callbacks: (
     (attr: string, el: Element, ...tail: Element[]) => Ast.ValueContainer<V>[]
-    )[] = [];
+  )[] = [];
   for (const matcher of node.matchers) {
     const predicate = matcher.predicate;
     const continuation = handleArray(matcher.cont);
     callbacks.push(
       (attr: string, el: Element, ...tail: Element[]) =>
-        (predicate(attr) ? continuation(el, ...tail) : [])
+        (predicate(attr) ? continuation(el, ...tail) : []),
     );
   }
   const attrName = node.name;
@@ -98,8 +104,8 @@ function handleAttrValueName<V>(
   };
 }
 
-function handlePushElementNode<V>(
-  node: Ast.PushElementNode<V>
+function handlePushElementNode<V> (
+  node: Ast.PushElementNode<V>,
 ): Types.MatcherFunction<Element, V> {
   const continuation = handleArray(node.cont);
   const leftElementGetter = (node.combinator === '+')
@@ -123,10 +129,10 @@ const getParentElement = (el: Element): Element | null => {
   return (parent && isTag(parent)) ? parent : null;
 };
 
-function handlePopElementNode<V>(
-  node: Ast.PopElementNode<V>
+function handlePopElementNode<V> (
+  node: Ast.PopElementNode<V>,
 ): Types.MatcherFunction<Element, V> {
   const continuation = handleArray(node.cont);
-  return (el: Element, next: Element, ...tail: Element[]) =>
+  return (_el: Element, next: Element, ...tail: Element[]) =>
     continuation(next, ...tail);
 }

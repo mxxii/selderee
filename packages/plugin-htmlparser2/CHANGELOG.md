@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.12.0 (WIP)
+
+* targeting Node 20;
+* adjusted `package.json` exports;
+* peer dependency on `selderee` package;
+* ... WIP ...
+
 ## Version 0.11.0
 
 * (`selderee`) Escape sequences in selectors.

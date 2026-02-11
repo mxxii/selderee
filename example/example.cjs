@@ -11,7 +11,7 @@ const selectorValuePairs = [
   ['div.foo', 'D'],
   ['div > p.foo', 'E'],
   ['div > p', 'F'],
-  ['#baz', 'G']
+  ['#baz', 'G'],
 ];
 
 // Make a tree structure from all given selectors.
@@ -22,7 +22,7 @@ const selectorsDecisionTree = new DecisionTree(selectorValuePairs);
 const prettyTree = selectorsDecisionTree.build(Treeify.treeify);
 console.log(prettyTree);
 
-const html = /*html*/`<html><body>
+const html = /* html */`<html><body>
   <div><p class="foo qux">second</p></div>
 </body></html>`;
 const dom = htmlparser2.parseDocument(html);

@@ -6,19 +6,19 @@
     "url": "git+https://github.com/mxxii/selderee.git"
   },
   "author": "KillyMXI",
-  "funding": "https://ko-fi.com/killymxi",
+  "funding": "https://github.com/sponsors/KillyMXI",
   "license": "MIT",
   "workspaces": [
     "packages/plugin-htmlparser2",
     "packages/selderee"
   ],
   "scripts": {
-    "build:docs": "typedoc --plugin typedoc-plugin-markdown",
+    "build:docs": "rimraf docs && typedoc --plugin typedoc-plugin-markdown",
     "build:selderee": "npm run build -w ./packages/selderee",
     "build:plugin-htmlparser2": "npm run build -w ./packages/plugin-htmlparser2",
     "build:packages": "npm run build:selderee && npm run build:plugin-htmlparser2",
     "build": "npm run copy:readme && npm run build:packages && npm run build:docs",
-    "checkAll": "npm run lint && npm test",
+    "checkAll": "npm test && npm run lint",
     "copy:readme": "copyfiles README.md packages/selderee/",
     "example": "node ./example/example.cjs",
     "lint:eslint": "eslint .",
@@ -26,28 +26,32 @@
     "lint": "npm run lint:eslint && npm run lint:md",
     "prepublishOnly": "npm run checkAll",
     "pretest": "npm run build:packages",
-    "test": "ava --timeout=20s"
+    "test": "ava"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.1",
-    "@tsconfig/node14": "^1.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.59.7",
-    "@typescript-eslint/parser": "^5.59.7",
-    "ava": "^5.3.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@stylistic/eslint-plugin": "^5.8.0",
+    "@tsconfig/node20": "^20.1.9",
+    "@types/node": "20.19.33",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "ava": "^6.4.1",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.41.0",
-    "eslint-plugin-jsonc": "^2.8.0",
-    "eslint-plugin-tsdoc": "^0.2.17",
-    "htmlparser2": "^8.0.2",
-    "markdownlint-cli2": "~0.7.1",
-    "rimraf": "^5.0.1",
-    "rollup": "^2.79.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-jsonc": "^2.21.1",
+    "eslint-plugin-tsdoc": "^0.5.0",
+    "htmlparser2": "^10.1.0",
+    "markdownlint-cli2": "~0.20.0",
+    "rimraf": "^6.1.2",
+    "rollup": "^4.57.1",
     "rollup-plugin-cleanup": "^3.2.1",
-    "ts-node": "^10.9.1",
-    "tslib": "^2.5.2",
-    "typedoc": "0.22.18",
-    "typedoc-plugin-markdown": "3.12.1",
-    "typescript": "4.7.4"
+    "rollup-plugin-delete": "^3.0.2",
+    "rollup-plugin-dts": "^6.3.0",
+    "ts-blank-space": "^0.7.0",
+    "tslib": "^2.8.1",
+    "typedoc": "0.28.16",
+    "typedoc-plugin-markdown": "4.10.0",
+    "typescript": "5.8.3",
+    "typescript-eslint": "^8.55.0"
   },
   "ava": {
     "extensions": {
@@ -59,8 +63,7 @@
       "packages/*/test/**/*"
     ],
     "nodeArguments": [
-      "--loader=ts-node/esm",
-      "--experimental-specifier-resolution=node"
+      "--import=ts-blank-space/register"
     ],
     "verbose": true
   }

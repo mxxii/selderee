@@ -1,3 +1,8 @@
+/**
+ * Decision tree node definitions.
+ *
+ * @packageDocumentation
+ */
 
 /**
  * Specificity as defined by Selectors spec.
@@ -18,7 +23,7 @@ export type Specificity = [number, number, number];
  * @typeParam V - the type of the associated value.
  */
 export type ValueContainer<V> = {
-  index: number,
+  index: number;
   specificity: Specificity;
   value: V;
 };
@@ -28,9 +33,9 @@ export type ValueContainer<V> = {
  * the value container to the list of successful matches.
  */
 export type TerminalNode<V> = {
-  type: 'terminal',
-  valueContainer: ValueContainer<V>
-}
+  type: 'terminal';
+  valueContainer: ValueContainer<V>;
+};
 
 /**
  * Tag name has to be checked.
@@ -38,28 +43,28 @@ export type TerminalNode<V> = {
  * into a dictionary key check.
  */
 export type TagNameNode<V> = {
-  type: 'tagName',
-  variants: VariantNode<V>[]
-}
+  type: 'tagName';
+  variants: VariantNode<V>[];
+};
 
 /**
  * String value variant.
  */
 export type VariantNode<V> = {
-  type: 'variant',
-  value: string,
-  cont: DecisionTreeNode<V>[]
-}
+  type: 'variant';
+  value: string;
+  cont: DecisionTreeNode<V>[];
+};
 
 /**
  * Have to check the presence of an element attribute
  * with the given name.
  */
 export type AttrPresenceNode<V> = {
-  type: 'attrPresence',
-  name: string,
-  cont: DecisionTreeNode<V>[]
-}
+  type: 'attrPresence';
+  name: string;
+  cont: DecisionTreeNode<V>[];
+};
 
 /**
  * Have to check the value of an element attribute
@@ -68,10 +73,10 @@ export type AttrPresenceNode<V> = {
  * one after another.
  */
 export type AttrValueNode<V> = {
-  type: 'attrValue',
-  name: string,
-  matchers: MatcherNode<V>[]
-}
+  type: 'attrValue';
+  name: string;
+  matchers: MatcherNode<V>[];
+};
 
 /**
  * String value matcher.
@@ -79,13 +84,13 @@ export type AttrValueNode<V> = {
  * from descriptive parameters.
  */
 export type MatcherNode<V> = {
-  type: 'matcher',
-  matcher: '=' | '~=' | '|=' | '^=' | '$=' | '*=',
-  modifier: 'i' | 's' | null,
-  value: string,
-  predicate: (prop: string) => boolean,
-  cont: DecisionTreeNode<V>[]
-}
+  type: 'matcher';
+  matcher: '=' | '~=' | '|=' | '^=' | '$=' | '*=';
+  modifier: 'i' | 's' | null;
+  value: string;
+  predicate: (prop: string) => boolean;
+  cont: DecisionTreeNode<V>[];
+};
 
 /**
  * Push next element on the stack, defined by the combinator.
@@ -94,19 +99,19 @@ export type MatcherNode<V> = {
  * All checks are performed on the element on top of the stack.
  */
 export type PushElementNode<V> = {
-  type: 'pushElement',
-  combinator: '>' | '+',
-  cont: DecisionTreeNode<V>[]
-}
+  type: 'pushElement';
+  combinator: '>' | '+';
+  cont: DecisionTreeNode<V>[];
+};
 
 /**
  * Remove the top element from the stack -
  * following checks are performed on the previous element.
  */
 export type PopElementNode<V> = {
-  type: 'popElement',
-  cont: DecisionTreeNode<V>[]
-}
+  type: 'popElement';
+  cont: DecisionTreeNode<V>[];
+};
 
 export type DecisionTreeNode<V> =
   | TerminalNode<V>

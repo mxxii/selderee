@@ -1,6 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "src/**/*.ts"
-  ]
+  "files": [
+    "src/selderee.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./lib",
+  },
 }

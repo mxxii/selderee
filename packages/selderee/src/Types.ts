@@ -1,7 +1,15 @@
-import { DecisionTreeNode, ValueContainer } from './Ast';
+/**
+ * Function types for builders and matchers.
+ *
+ * @packageDocumentation
+ */
+
+import type { DecisionTreeNode, ValueContainer } from './Ast.ts';
 
 /**
- * A function that turn a decision tree into a usable form.
+ * A function that turn a decision tree into a callable form.
+ *
+ * To be implemented by builder plugins.
  *
  * @typeParam V - the type of associated value.
  *
@@ -12,13 +20,12 @@ export type BuilderFunction<V, R> =
   (nodes: DecisionTreeNode<V>[]) => R;
 
 /**
- * Recommended matcher function shape to implement
- * in builders.
+ * Recommended matcher function shape to implement in builders.
  *
  * The elements stack is represented as the arguments array.
  *
  * @typeParam L - the type of elements in a particular DOM AST.
  * @typeParam V - the type of associated value.
  */
-export type MatcherFunction<L,V> =
+export type MatcherFunction<L, V> =
   (el: L, ...tail: L[]) => ValueContainer<V>[];

@@ -1,5 +1,13 @@
-import * as Ast from './Ast';
-import { BuilderFunction } from './Types';
+/**
+ * Basic {@link BuilderFunction} implementation
+ * for decision tree visualization.
+ *
+ * @packageDocumentation
+ */
+
+import * as Ast from './Ast.ts';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { BuilderFunction } from './Types.ts';
 
 /**
  * A {@link BuilderFunction} implementation.
@@ -15,8 +23,9 @@ import { BuilderFunction } from './Types';
  * @param nodes - nodes from the root level of the decision tree.
  * @returns the string representation of the tree.
  */
-export const treeify: BuilderFunction<string, string> =
-  (nodes) => '▽\n' + treeifyArray(nodes, thinLines);
+export function treeify (nodes: Ast.DecisionTreeNode<string>[]): string {
+  return '▽\n' + treeifyArray(nodes, thinLines);
+}
 
 // ==============================================
 
@@ -30,14 +39,14 @@ type anyNode =
   | Ast.VariantNode<string>
   | Ast.MatcherNode<string>;
 
-function treeifyArray(
+function treeifyArray (
   nodes: anyNode[],
-  tpl: treePrefixTemplate = heavyLines
+  tpl: treePrefixTemplate = heavyLines,
 ) {
   return prefixItems(tpl, nodes.map(n => treeifyNode(n)));
 }
 
-function treeifyNode(node: anyNode): string {
+function treeifyNode (node: anyNode): string {
   switch (node.type) {
     case 'terminal':{
       const vctr = node.valueContainer;
@@ -60,13 +69,13 @@ function treeifyNode(node: anyNode): string {
   }
 }
 
-function prefixItems(tpl: treePrefixTemplate, items: string[]): string {
+function prefixItems (tpl: treePrefixTemplate, items: string[]): string {
   return items
     .map((item, i, { length }) => prefixItem(tpl, item, i === length - 1))
     .join('\n');
 }
 
-function prefixItem(tpl: treePrefixTemplate, item: string, tail = true): string {
+function prefixItem (tpl: treePrefixTemplate, item: string, tail = true): string {
   const tpl1 = tpl[tail ? 1 : 0];
   return tpl1[0] + item.split('\n').join('\n' + tpl1[1]);
 }

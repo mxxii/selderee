@@ -1,6 +1,6 @@
 import { compareSpecificity } from 'parseley';
-import { ValueContainer } from './Ast';
-import { MatcherFunction } from './Types';
+import { type ValueContainer } from './Ast.ts';
+import { type MatcherFunction } from './Types.ts';
 
 /**
  * Simple wrapper around the matcher function.
@@ -9,9 +9,8 @@ import { MatcherFunction } from './Types';
  * @typeParam L - the type of HTML Element in the targeted DOM AST.
  * @typeParam V - the type of associated values.
  */
-export class Picker<L,V> {
-
-  private f: MatcherFunction<L,V>;
+export class Picker<L, V> {
+  private f: MatcherFunction<L, V>;
 
   /**
    * Create new Picker object.
@@ -22,7 +21,7 @@ export class Picker<L,V> {
    * @param f - the function that matches an element
    * and returns all associated values.
    */
-  constructor (f: MatcherFunction<L,V>) {
+  constructor (f: MatcherFunction<L, V>) {
     this.f = f;
   }
 
@@ -57,7 +56,7 @@ export class Picker<L,V> {
    */
   pick1 (
     el: L,
-    preferFirst = false
+    preferFirst = false,
   ): V | null {
     const results = this.f(el);
     const len = results.length;
@@ -73,20 +72,19 @@ export class Picker<L,V> {
     }
     return result.value;
   }
-
 }
 
-function comparatorPreferFirst<V>(
+function comparatorPreferFirst<V> (
   acc: ValueContainer<V>,
-  next: ValueContainer<V>
+  next: ValueContainer<V>,
 ): boolean {
   const diff = compareSpecificity(next.specificity, acc.specificity);
   return diff > 0 || (diff === 0 && next.index < acc.index);
 }
 
-function comparatorPreferLast<V>(
+function comparatorPreferLast<V> (
   acc: ValueContainer<V>,
-  next: ValueContainer<V>
+  next: ValueContainer<V>,
 ): boolean {
   const diff = compareSpecificity(next.specificity, acc.specificity);
   return diff > 0 || (diff === 0 && next.index > acc.index);

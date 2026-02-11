@@ -1,15 +1,33 @@
 {
-  "disableSources": true,
-  "entryDocument": "index.md",
+  "entryFileName": "index.md",
   "entryPoints": [
-    "./packages/*"
+    "./packages/selderee/src/selderee.ts",
+    "./packages/plugin-htmlparser2/src/hp2-builder.ts"
   ],
-  "entryPointStrategy": "packages",
   "excludePrivate": true,
+  "disableSources": true,
   "githubPages": false,
   "hideBreadcrumbs": false,
   "includeVersion": false,
   "name": "API documentation",
   "readme": "none",
-  "out": "docs"
+  "out": "docs",
+  "plugin": ["typedoc-plugin-markdown"],
+  "router": "module",
+  "useCodeBlocks": true,
+  "expandParameters": true,
+  "parametersFormat": "table",
+  "typeAliasPropertiesFormat": "table",
+  "indexFormat": "table",
+  "useHTMLEncodedBrackets": true,
+  "externalSymbolLinkMappings": {
+    "selderee": {
+      "Picker": "../../selderee/src/selderee/index.md#Picker",
+      "Ast_DecisionTreeNode": "../../selderee/src/selderee/namespaces/Ast.md#DecisionTreeNode",
+      "Types_BuilderFunction": "../../selderee/src/selderee/namespaces/Types.md#BuilderFunction",
+    },
+    "domhandler": {
+      "Element": "https://domhandler.js.org/classes/Element.html",
+    }
+  }
 }

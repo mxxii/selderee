@@ -1,6 +1,6 @@
 {
   "name": "@selderee/plugin-htmlparser2",
-  "version": "0.11.0",
+  "version": "0.12.0-wip.1",
   "description": "selderee plugin - selectors decision tree builder for htmlparser2 DOM.",
   "keywords": [
     "htmlparser2",
@@ -17,17 +17,25 @@
   },
   "homepage": "https://github.com/mxxii/selderee",
   "author": "KillyMXI",
-  "funding": "https://ko-fi.com/killymxi",
+  "funding": "https://github.com/sponsors/KillyMXI",
   "license": "MIT",
   "exports": {
-    "import": "./lib/hp2-builder.mjs",
-    "require": "./lib/hp2-builder.cjs"
+    ".": {
+      "import": {
+        "types": "./lib/hp2-builder.d.mts",
+        "default": "./lib/hp2-builder.mjs"
+      },
+      "require": {
+        "types": "./lib/hp2-builder.d.cts",
+        "default": "./lib/hp2-builder.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "type": "module",
   "main": "./lib/hp2-builder.cjs",
   "module": "./lib/hp2-builder.mjs",
-  "types": "./lib/hp2-builder.d.ts",
-  "typedocMain": "./src/hp2-builder.ts",
+  "types": "./lib/hp2-builder.d.cts",
   "files": [
     "lib"
   ],
@@ -38,7 +46,12 @@
     "clean": "rimraf lib"
   },
   "dependencies": {
-    "domhandler": "^5.0.3",
-    "selderee": "^0.11.0"
+    "domhandler": "^5.0.3"
+  },
+  "peerDependencies": {
+    "selderee": "~0.12.0-wip.1"
+  },
+  "devDependencies": {
+    "selderee": "~0.12.0-wip.1"
   }
 }

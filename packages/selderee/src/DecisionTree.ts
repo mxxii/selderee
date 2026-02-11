@@ -1,6 +1,18 @@
 import * as parseley from 'parseley';
-import * as Ast from './Ast';
-import { BuilderFunction } from './Types';
+import * as Ast from './Ast.ts';
+import { type BuilderFunction } from './Types.ts';
+
+/**
+ * Options for DecisionTree construction.
+ */
+export type DecisionTreeOptions = {
+  /**
+   * Attribute names whose values should be case-insensitive by default.
+   *
+   * Only affects attribute value selectors (`[name="value"]`) with no explicit case-sensitivity modifier (`i` or `s`).
+   */
+  attributesWithNormalizedValues?: string[];
+};
 
 /**
  * CSS selectors decision tree.
@@ -14,7 +26,6 @@ import { BuilderFunction } from './Types';
  * @typeParam V - the type of values associated with selectors.
  */
 export class DecisionTree<V> {
-
   private readonly branches: Ast.DecisionTreeNode<V>[];
 
   /**
@@ -22,15 +33,16 @@ export class DecisionTree<V> {
    *
    * @param input - an array containing all selectors
    * paired with associated values.
+   * @param options - optional configuration for the decision tree.
    *
    * @typeParam V - the type of values associated with selectors.
    */
-  constructor(input: [string, V][]) {
-    this.branches = weave(toAstTerminalPairs(input));
+  constructor (input: [string, V][], options: DecisionTreeOptions = {}) {
+    this.branches = weave(toAstTerminalPairs(input, options));
   }
 
   /**
-   * Turn this decision tree into a usable form.
+   * Turn this decision tree into a callable form.
    *
    * @typeParam R - return type defined by the builder function.
    *
@@ -41,7 +53,6 @@ export class DecisionTree<V> {
   build<R>(builder: BuilderFunction<V, R>): R {
     return builder(this.branches);
   }
-
 }
 
 // ==============================================
@@ -52,36 +63,46 @@ type AstTerminalPair<V> = {
 };
 
 type SelectorsGroup<V, S extends parseley.Ast.SimpleSelector> = {
-  oneSimpleSelector: S,
-  items: AstTerminalPair<V>[]
-}
+  oneSimpleSelector: S;
+  items: AstTerminalPair<V>[];
+};
 
-function toAstTerminalPairs<V>(array: [string, V][]): AstTerminalPair<V>[] {
+function toAstTerminalPairs<V> (
+  array: [string, V][],
+  options: DecisionTreeOptions,
+): AstTerminalPair<V>[] {
   const len = array.length;
   const results = new Array(len) as AstTerminalPair<V>[];
   for (let i = 0; i < len; i++) {
     const [selectorString, val] = array[i];
-    const ast = preprocess(parseley.parse1(selectorString));
+    const ast = preprocess(parseley.parse1(selectorString), options);
     results[i] = {
       ast: ast,
       terminal: {
         type: 'terminal',
-        valueContainer: { index: i, value: val, specificity: ast.specificity }
-      }
+        valueContainer: { index: i, value: val, specificity: ast.specificity },
+      },
     };
   }
   return results;
 }
 
-function preprocess (ast: parseley.Ast.CompoundSelector): parseley.Ast.CompoundSelector {
+function preprocess (
+  ast: parseley.Ast.CompoundSelector,
+  options: DecisionTreeOptions,
+): parseley.Ast.CompoundSelector {
   reduceSelectorVariants(ast);
-  parseley.normalize(ast);
+  parseley.normalize(ast, {
+    mode: 'html',
+    attributesWithNormalizedValues: options.attributesWithNormalizedValues ?? [],
+    allowUnspecifiedCaseSensitivityForAttributes: false,
+  });
   return ast;
 }
 
 function reduceSelectorVariants (ast: parseley.Ast.CompoundSelector): void {
   const newList: parseley.Ast.SimpleSelector[] = [];
-  ast.list.forEach(sel => {
+  ast.list.forEach((sel) => {
     switch (sel.type) {
       case 'class':
         newList.push({
@@ -100,7 +121,7 @@ function reduceSelectorVariants (ast: parseley.Ast.CompoundSelector): void {
           modifier: null,
           name: 'id',
           namespace: null,
-          specificity: sel.specificity,
+          specificity: [0, 1, 0], // safe change because SimpleSelector specificity is not used after this
           type: 'attrValue',
           value: sel.name,
         });
@@ -125,11 +146,11 @@ function weave<V> (items: AstTerminalPair<V>[]): Ast.DecisionTreeNode<V>[] {
   while (items.length) {
     const topKind = findTopKey(
       items,
-      (sel): sel is parseley.Ast.SimpleSelector => true,
-      getSelectorKind
+      (_sel): _sel is parseley.Ast.SimpleSelector => true,
+      getSelectorKind,
     );
-    const { matches, nonmatches, empty } = breakByKind(items, topKind);
-    items = nonmatches;
+    const { matches, nonMatches, empty } = breakByKind(items, topKind);
+    items = nonMatches;
     if (matches.length) {
       branches.push(branchOfKind(topKind, matches));
     }
@@ -141,7 +162,7 @@ function weave<V> (items: AstTerminalPair<V>[]): Ast.DecisionTreeNode<V>[] {
 }
 
 function terminate<V> (
-  items: AstTerminalPair<V>[]
+  items: AstTerminalPair<V>[],
 ): (Ast.TerminalNode<V> | Ast.PopElementNode<V>)[] {
   const results: (Ast.TerminalNode<V> | Ast.PopElementNode<V>)[] = [];
   for (const item of items) {
@@ -151,9 +172,9 @@ function terminate<V> (
     } else { // popElement - lift contained terminals
       const { matches, rest } = partition(
         terminal.cont,
-        (node): node is Ast.TerminalNode<V> => node.type === 'terminal'
+        (node): node is Ast.TerminalNode<V> => node.type === 'terminal',
       );
-      matches.forEach((node) => results.push(node));
+      matches.forEach(node => results.push(node));
       if (rest.length) {
         terminal.cont = rest;
         results.push(terminal);
@@ -165,18 +186,18 @@ function terminate<V> (
 
 function breakByKind<V> (items: AstTerminalPair<V>[], selectedKind: string) {
   const matches: AstTerminalPair<V>[] = [];
-  const nonmatches: AstTerminalPair<V>[] = [];
+  const nonMatches: AstTerminalPair<V>[] = [];
   const empty: AstTerminalPair<V>[] = [];
   for (const item of items) {
-    const simpsels = item.ast.list;
-    if (simpsels.length) {
-      const isMatch = simpsels.some(node => getSelectorKind(node) === selectedKind);
-      (isMatch ? matches : nonmatches).push(item);
+    const simpleSelectors = item.ast.list;
+    if (simpleSelectors.length) {
+      const isMatch = simpleSelectors.some(node => getSelectorKind(node) === selectedKind);
+      (isMatch ? matches : nonMatches).push(item);
     } else {
       empty.push(item);
     }
   }
-  return { matches, nonmatches, empty };
+  return { matches, nonMatches, empty };
 }
 
 function getSelectorKind (sel: parseley.Ast.SimpleSelector): string {
@@ -194,7 +215,7 @@ function getSelectorKind (sel: parseley.Ast.SimpleSelector): string {
 
 function branchOfKind<V> (
   kind: string,
-  items: AstTerminalPair<V>[]
+  items: AstTerminalPair<V>[],
 ): Ast.DecisionTreeNode<V> {
   if (kind === 'tag') {
     return tagNameBranch(items);
@@ -215,30 +236,30 @@ function branchOfKind<V> (
 }
 
 function tagNameBranch<V> (
-  items: AstTerminalPair<V>[]
+  items: AstTerminalPair<V>[],
 ): Ast.TagNameNode<V> {
   const groups = spliceAndGroup(
     items,
     (x): x is parseley.Ast.TagSelector => x.type === 'tag',
-    (x) => x.name
+    x => x.name,
   );
   const variants: Ast.VariantNode<V>[] =
-  Object.entries(groups).map(
-    ([name, group]) => ({
-      type: 'variant',
-      value: name,
-      cont: weave(group.items)
-    })
-  );
+    Object.entries(groups).map(
+      ([name, group]) => ({
+        type: 'variant',
+        value: name,
+        cont: weave(group.items),
+      }),
+    );
   return {
     type: 'tagName',
-    variants: variants
+    variants: variants,
   };
 }
 
 function attrPresenceBranch<V> (
   name: string,
-  items: AstTerminalPair<V>[]
+  items: AstTerminalPair<V>[],
 ): Ast.AttrPresenceNode<V> {
   for (const item of items) {
     spliceSimpleSelector(item, (x): x is parseley.Ast.AttributePresenceSelector => (x.type === 'attrPresence') && (x.name === name));
@@ -246,18 +267,18 @@ function attrPresenceBranch<V> (
   return {
     type: 'attrPresence',
     name: name,
-    cont: weave(items)
+    cont: weave(items),
   };
 }
 
 function attrValueBranch<V> (
   name: string,
-  items: AstTerminalPair<V>[]
+  items: AstTerminalPair<V>[],
 ): Ast.AttrValueNode<V> {
   const groups = spliceAndGroup(
     items,
     (x): x is parseley.Ast.AttributeValueSelector => (x.type === 'attrValue') && (x.name === name),
-    (x) => `${x.matcher} ${x.modifier || ''} ${x.value}`
+    x => `${x.matcher} ${x.modifier || ''} ${x.value}`,
   );
   const matchers: Ast.MatcherNode<V>[] = [];
   for (const group of Object.values(groups)) {
@@ -270,32 +291,32 @@ function attrValueBranch<V> (
       modifier: sel.modifier,
       value: sel.value,
       predicate: predicate,
-      cont: continuation
+      cont: continuation,
     });
   }
   return {
     type: 'attrValue',
     name: name,
-    matchers: matchers
+    matchers: matchers,
   };
 }
 
 function getAttrPredicate (
-  sel: parseley.Ast.AttributeValueSelector
+  sel: parseley.Ast.AttributeValueSelector,
 ): (actual: string) => boolean {
   if (sel.modifier === 'i') {
     const expected = sel.value.toLowerCase();
     switch (sel.matcher) {
       case '=':
-        return (actual) => expected === actual.toLowerCase();
+        return actual => expected === actual.toLowerCase();
       case '~=':
-        return (actual) => actual.toLowerCase().split(/[ \t]+/).includes(expected);
+        return actual => actual.toLowerCase().split(/[ \t]+/).includes(expected);
       case '^=':
-        return (actual) => actual.toLowerCase().startsWith(expected);
+        return actual => actual.toLowerCase().startsWith(expected);
       case '$=':
-        return (actual) => actual.toLowerCase().endsWith(expected);
+        return actual => actual.toLowerCase().endsWith(expected);
       case '*=':
-        return (actual) => actual.toLowerCase().includes(expected);
+        return actual => actual.toLowerCase().includes(expected);
       case '|=':
         return (actual) => {
           const lower = actual.toLowerCase();
@@ -306,29 +327,29 @@ function getAttrPredicate (
     const expected = sel.value;
     switch (sel.matcher) {
       case '=':
-        return (actual) => expected === actual;
+        return actual => expected === actual;
       case '~=':
-        return (actual) => actual.split(/[ \t]+/).includes(expected);
+        return actual => actual.split(/[ \t]+/).includes(expected);
       case '^=':
-        return (actual) => actual.startsWith(expected);
+        return actual => actual.startsWith(expected);
       case '$=':
-        return (actual) => actual.endsWith(expected);
+        return actual => actual.endsWith(expected);
       case '*=':
-        return (actual) => actual.includes(expected);
+        return actual => actual.includes(expected);
       case '|=':
-        return (actual) => (expected === actual) || (actual.startsWith(expected) && actual[expected.length] === '-');
+        return actual => (expected === actual) || (actual.startsWith(expected) && actual[expected.length] === '-');
     }
   }
 }
 
 function combinatorBranch<V> (
   combinator: '>' | '+',
-  items: AstTerminalPair<V>[]
+  items: AstTerminalPair<V>[],
 ): Ast.PushElementNode<V> {
   const groups = spliceAndGroup(
     items,
     (x): x is parseley.Ast.Combinator => (x.type === 'combinator') && (x.combinator === combinator),
-    (x) => parseley.serialize(x.left)
+    x => parseley.serialize(x.left),
   );
   const leftItems: AstTerminalPair<V>[] = [];
   for (const group of Object.values(groups)) {
@@ -336,20 +357,20 @@ function combinatorBranch<V> (
     const leftAst = group.oneSimpleSelector.left;
     leftItems.push({
       ast: leftAst,
-      terminal: { type: 'popElement', cont: rightCont }
+      terminal: { type: 'popElement', cont: rightCont },
     });
   }
   return {
     type: 'pushElement',
     combinator: combinator,
-    cont: weave(leftItems)
+    cont: weave(leftItems),
   };
 }
 
 function spliceAndGroup<V, S extends parseley.Ast.SimpleSelector> (
   items: AstTerminalPair<V>[],
   predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
-  keyCallback: (sel: S) => string
+  keyCallback: (sel: S) => string,
 ) {
   const groups: Record<string, SelectorsGroup<V, S>> = {};
   while (items.length) {
@@ -377,13 +398,13 @@ function spliceAndGroup<V, S extends parseley.Ast.SimpleSelector> (
 
 function spliceSimpleSelector<V, S extends parseley.Ast.SimpleSelector> (
   item: AstTerminalPair<V>,
-  predicate: (sel: parseley.Ast.SimpleSelector) => sel is S
+  predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
 ): S {
-  const simpsels = item.ast.list;
-  const matches: boolean[] = new Array<boolean>(simpsels.length);
+  const simpleSelectors = item.ast.list;
+  const matches: boolean[] = new Array<boolean>(simpleSelectors.length);
   let firstIndex = -1;
-  for (let i = simpsels.length; i-- > 0;) {
-    if (predicate(simpsels[i])) {
+  for (let i = simpleSelectors.length; i-- > 0;) {
+    if (predicate(simpleSelectors[i])) {
       matches[i] = true;
       firstIndex = i;
     }
@@ -391,15 +412,15 @@ function spliceSimpleSelector<V, S extends parseley.Ast.SimpleSelector> (
   if (firstIndex == -1) {
     throw new Error(`Couldn't find the required simple selector.`);
   }
-  const result = simpsels[firstIndex];
-  item.ast.list = simpsels.filter((sel, i) => !matches[i]);
+  const result = simpleSelectors[firstIndex];
+  item.ast.list = simpleSelectors.filter((_, i) => !matches[i]);
   return result as S;
 }
 
 function findTopKey<V, S extends parseley.Ast.SimpleSelector> (
   items: AstTerminalPair<V>[],
   predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
-  keyCallback: (sel: S) => string
+  keyCallback: (sel: S) => string,
 ): string {
   const candidates: Record<string, number> = {};
   for (const item of items) {
@@ -426,10 +447,10 @@ function findTopKey<V, S extends parseley.Ast.SimpleSelector> (
   return topKind;
 }
 
-function partition<T, R extends T>(
+function partition<T, R extends T> (
   src: T[],
-  predicate: (x: T) => x is R
-): { matches: R[], rest: T[] } {
+  predicate: (x: T) => x is R,
+): { matches: R[]; rest: T[] } {
   const matches: R[] = [];
   const rest: T[] = [];
   for (const x of src) {
@@ -438,10 +459,10 @@ function partition<T, R extends T>(
   return { matches, rest };
 }
 
-function partition1<T>(
+function partition1<T> (
   src: T[],
-  predicate: (x: T) => boolean
-): { matches: T[], rest: T[] } {
+  predicate: (x: T) => boolean,
+): { matches: T[]; rest: T[] } {
   const matches: T[] = [];
   const rest: T[] = [];
   for (const x of src) {

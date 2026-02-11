@@ -1,6 +1,6 @@
 {
   "name": "selderee",
-  "version": "0.11.0",
+  "version": "0.12.0-wip.1",
   "description": "Selectors decision tree - choose matching selectors, fast",
   "keywords": [
     "CSS",
@@ -17,17 +17,25 @@
   },
   "homepage": "https://github.com/mxxii/selderee",
   "author": "KillyMXI",
-  "funding": "https://ko-fi.com/killymxi",
+  "funding": "https://github.com/sponsors/KillyMXI",
   "license": "MIT",
   "exports": {
-    "import": "./lib/selderee.mjs",
-    "require": "./lib/selderee.cjs"
+    ".": {
+      "import": {
+        "types": "./lib/selderee.d.mts",
+        "default": "./lib/selderee.mjs"
+      },
+      "require": {
+        "types": "./lib/selderee.d.cts",
+        "default": "./lib/selderee.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "type": "module",
   "main": "./lib/selderee.cjs",
   "module": "./lib/selderee.mjs",
-  "types": "./lib/selderee.d.ts",
-  "typedocMain": "./src/selderee.ts",
+  "types": "./lib/selderee.d.cts",
   "files": [
     "lib"
   ],
@@ -39,6 +47,6 @@
     "clean": "rimraf lib"
   },
   "dependencies": {
-    "parseley": "^0.12.0"
+    "parseley": "~0.13.1"
   }
 }

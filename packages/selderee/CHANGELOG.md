@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 0.12.0 (WIP)
+
+* targeting Node 20;
+* adjusted `package.json` exports;
+* `DecisionTree` now accepts an options object (`DecisionTreeOptions`) as an optional second argument:
+  * `attributesWithNormalizedValues`: string[] - list of attribute names whose values should be normalized (lowercased) when matching selectors. Default: `[]`
+    * by default, all attribute values without explicit case-sensitivity flag are matched case-sensitively
+* ... WIP ...
+
 ## Version 0.11.0
 
 * Bump `parseley` dependency to version 0.12.0 ([changelog](https://github.com/mxxii/parseley/blob/main/CHANGELOG.md)). Escape sequences in selectors.
