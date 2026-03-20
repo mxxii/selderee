@@ -23,8 +23,12 @@ The main `selderee` package offers the selectors tree structure. Runnable decisi
 
 ## Limitations
 
-- Pseudo-classes and pseudo-elements are not supported by the underlying library [parseley](https://github.com/mxxii/parseley) (yet?);
-- General siblings (`~`), descendants (` `) and same column combinators (`||`) are also not supported.
+- Only selected combinators are supported - child (`>`) and adjacent siblings (`+`);
+  - General siblings (`~`), descendants (` `) and same column (`||`) combinators are not supported;
+- (0.12.x+) Only selected pseudo-classes are currently supported - `:empty`, `:first-child`, `:last-child`, `:only-child` and `:any-link`;
+  - Other pseudo-classes and pseudo-elements are not supported here or in the underlying library [parseley](https://github.com/mxxii/parseley) yet;
+- Case sensitivity model of attribute value selectors is simplified: matching is case-sensitive by default (if no case-sensitivity flag is specified);
+  - (0.12.x+) It is left to client code to specify what attributes have to be case-insensitive by default - via `DecisionTreeOptions.attributesWithNormalizedValues`.
 
 
 ## `selderee` vs `css-select`
@@ -79,7 +83,10 @@ const selectorValuePairs = [
 ];
 
 // Make a tree structure from all given selectors.
-const selectorsDecisionTree = new DecisionTree(selectorValuePairs);
+const selectorsDecisionTree = new DecisionTree(
+  selectorValuePairs,
+  { attributesWithNormalizedValues: [] }, // optional, default is `[]`
+);
 
 // `treeify` builder produces a string output for testing and debug purposes.
 // `treeify` expects string values attached to each selector.
@@ -105,14 +112,14 @@ const bestMatch = picker.pick1(element);
 console.log(`Best matched value: ${bestMatch}`);
 ```
 
-<details><summary>Example output</summary>
+Output of the example:
 
 ```text
 ▽
 ├─◻ Tag name
 │ ╟─◇ = p
 │ ║ ┠─▣ Attr value: class
-│ ║ ┃ ╙─◈ ~= "foo"
+│ ║ ┃ ╙─◈ ~= "foo"s
 │ ║ ┃   ┠─◨ Attr presence: bar
 │ ║ ┃   ┃ ┖─◁ #1 [0,2,1] B
 │ ║ ┃   ┠─◁ #2 [0,1,1] C
@@ -127,25 +134,18 @@ console.log(`Best matched value: ${bestMatch}`);
 │ ║       ┖─◁ #5 [0,0,2] F
 │ ╙─◇ = div
 │   ┖─▣ Attr value: class
-│     ╙─◈ ~= "foo"
+│     ╙─◈ ~= "foo"s
 │       ┖─◁ #3 [0,1,1] D
 └─▣ Attr value: id
-  ╙─◈ = "baz"
+  ╙─◈ = "baz"s
     ┖─◁ #6 [1,0,0] G
-[ { index: 2, value: 'C', specificity: [ 0, 1, 1 ] },
+[
+  { index: 2, value: 'C', specificity: [ 0, 1, 1 ] },
   { index: 4, value: 'E', specificity: [ 0, 1, 2 ] },
   { index: 0, value: 'A', specificity: [ 0, 0, 1 ] },
-  { index: 5, value: 'F', specificity: [ 0, 0, 2 ] } ]
+  { index: 5, value: 'F', specificity: [ 0, 0, 2 ] }
+]
 Best matched value: E
 ```
 
 *Some gotcha: you may notice the check for `#baz` has to be performed every time the decision tree is called. If it happens to be `p#baz` or `div#baz` or even `.foo#baz` - it would be much better to write it like this. Deeper, narrower tree means less checks on average. (in case of `.foo#baz` the class check might finally outweigh the tag name check and rebalance the tree.)*
-
-</details>
-
-
-## Development
-
-Targeting Node.js version >=14.
-
-Monorepo uses NPM v7 workspaces (make sure v7 is installed when used with Node.js v14.)

@@ -15,7 +15,10 @@ const selectorValuePairs = [
 ];
 
 // Make a tree structure from all given selectors.
-const selectorsDecisionTree = new DecisionTree(selectorValuePairs);
+const selectorsDecisionTree = new DecisionTree(
+  selectorValuePairs,
+  { attributesWithNormalizedValues: [] }, // optional, default is `[]`
+);
 
 // `treeify` builder produces a string output for testing and debug purposes.
 // `treeify` expects string values attached to each selector.

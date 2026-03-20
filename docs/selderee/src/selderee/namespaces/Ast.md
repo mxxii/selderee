@@ -70,6 +70,7 @@ type DecisionTreeNode<V> =
   | TagNameNode<V>
   | AttrPresenceNode<V>
   | AttrValueNode<V>
+  | PseudoClassNode<V>
   | PushElementNode<V>
   | PopElementNode<V>;
 ```
@@ -135,6 +136,30 @@ following checks are performed on the previous element.
 
 ***
 
+### PseudoClassNode
+
+```ts
+type PseudoClassNode<V> = object;
+```
+
+Simple pseudo-class condition has to be checked.
+
+#### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `V` |
+
+#### Properties
+
+| Property | Type |
+| ------ | ------ |
+| <a id="property-cont-3"></a> `cont` | [`DecisionTreeNode`](#decisiontreenode)&lt;`V`&gt;[] |
+| <a id="property-name-2"></a> `name` | `string` |
+| <a id="property-type-4"></a> `type` | `"pseudoClass"` |
+
+***
+
 ### PushElementNode
 
 ```ts
@@ -157,8 +182,8 @@ All checks are performed on the element on top of the stack.
 | Property | Type |
 | ------ | ------ |
 | <a id="property-combinator"></a> `combinator` | `">"` \| `"+"` |
-| <a id="property-cont-3"></a> `cont` | [`DecisionTreeNode`](#decisiontreenode)&lt;`V`&gt;[] |
-| <a id="property-type-4"></a> `type` | `"pushElement"` |
+| <a id="property-cont-4"></a> `cont` | [`DecisionTreeNode`](#decisiontreenode)&lt;`V`&gt;[] |
+| <a id="property-type-5"></a> `type` | `"pushElement"` |
 
 ***
 
@@ -199,7 +224,7 @@ into a dictionary key check.
 
 | Property | Type |
 | ------ | ------ |
-| <a id="property-type-5"></a> `type` | `"tagName"` |
+| <a id="property-type-6"></a> `type` | `"tagName"` |
 | <a id="property-variants"></a> `variants` | [`VariantNode`](#variantnode)&lt;`V`&gt;[] |
 
 ***
@@ -223,7 +248,7 @@ the value container to the list of successful matches.
 
 | Property | Type |
 | ------ | ------ |
-| <a id="property-type-6"></a> `type` | `"terminal"` |
+| <a id="property-type-7"></a> `type` | `"terminal"` |
 | <a id="property-valuecontainer"></a> `valueContainer` | [`ValueContainer`](#valuecontainer)&lt;`V`&gt; |
 
 ***
@@ -271,6 +296,6 @@ String value variant.
 
 | Property | Type |
 | ------ | ------ |
-| <a id="property-cont-4"></a> `cont` | [`DecisionTreeNode`](#decisiontreenode)&lt;`V`&gt;[] |
-| <a id="property-type-7"></a> `type` | `"variant"` |
+| <a id="property-cont-5"></a> `cont` | [`DecisionTreeNode`](#decisiontreenode)&lt;`V`&gt;[] |
+| <a id="property-type-8"></a> `type` | `"variant"` |
 | <a id="property-value-2"></a> `value` | `string` |

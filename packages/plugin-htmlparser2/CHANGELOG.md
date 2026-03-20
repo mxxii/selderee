@@ -1,11 +1,11 @@
 # Changelog
 
-## Version 0.12.0 (WIP)
+## Version 0.12.0
 
 * targeting Node 20;
 * adjusted `package.json` exports;
 * peer dependency on `selderee` package;
-* ... WIP ...
+* (`selderee`) pseudo-classes - `:empty`, `:first-child`, `:last-child`, `:only-child`, `:any-link`.
 
 ## Version 0.11.0
 

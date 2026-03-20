@@ -1,6 +1,6 @@
 {
   "name": "selderee",
-  "version": "0.12.0-wip.1",
+  "version": "0.12.0",
   "description": "Selectors decision tree - choose matching selectors, fast",
   "keywords": [
     "CSS",

@@ -10,7 +10,7 @@ Function types for builders and matchers.
 
 ## Type Aliases
 
-### BuilderFunction()
+### BuilderFunction
 
 ```ts
 type BuilderFunction<V, R> = (nodes: DecisionTreeNode<V>[]) => R;
@@ -39,7 +39,7 @@ To be implemented by builder plugins.
 
 ***
 
-### MatcherFunction()
+### MatcherFunction
 
 ```ts
 type MatcherFunction<L, V> = (el: L, ...tail: L[]) => ValueContainer<V>[];

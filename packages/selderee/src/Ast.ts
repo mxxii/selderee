@@ -93,6 +93,15 @@ export type MatcherNode<V> = {
 };
 
 /**
+ * Simple pseudo-class condition has to be checked.
+ */
+export type PseudoClassNode<V> = {
+  type: 'pseudoClass';
+  name: string;
+  cont: DecisionTreeNode<V>[];
+};
+
+/**
  * Push next element on the stack, defined by the combinator.
  * Only `>` and `+` are expected to be supported.
  *
@@ -118,5 +127,6 @@ export type DecisionTreeNode<V> =
   | TagNameNode<V>
   | AttrPresenceNode<V>
   | AttrValueNode<V>
+  | PseudoClassNode<V>
   | PushElementNode<V>
   | PopElementNode<V>;

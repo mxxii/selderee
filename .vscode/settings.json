@@ -14,5 +14,9 @@
       "json",
       "jsonc",
       "json5"
+    ],
+    "cSpell.words": [
+      "domelementtype",
+      "vctr"
     ]
   }

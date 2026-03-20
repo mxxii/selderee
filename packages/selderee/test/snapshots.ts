@@ -92,6 +92,12 @@ test('id selector vs id attribute value', snapshotMacro, [
   ['[id="foo"].bar', 'value 4'],
 ]);
 
+test('supported pseudo-class selectors', snapshotMacro, [
+  [':empty', 'value 1'],
+  [':first-child:last-child', 'value 2'],
+  [':only-child', 'value 3'],
+]);
+
 test('attribute value normalization', (t) => {
   const input: [string, string][] = [
     ['[type="text"]', 'value 1'],

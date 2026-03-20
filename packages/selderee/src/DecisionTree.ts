@@ -67,6 +67,12 @@ type SelectorsGroup<V, S extends parseley.Ast.SimpleSelector> = {
   items: AstTerminalPair<V>[];
 };
 
+/**
+ * Convert the input array of selector strings and associated values
+ * into an array of parsed selector ASTs and terminal nodes.
+ *
+ * Selector ASTs are reduced and normalized.
+ */
 function toAstTerminalPairs<V> (
   array: [string, V][],
   options: DecisionTreeOptions,
@@ -75,7 +81,13 @@ function toAstTerminalPairs<V> (
   const results = new Array(len) as AstTerminalPair<V>[];
   for (let i = 0; i < len; i++) {
     const [selectorString, val] = array[i];
-    const ast = preprocess(parseley.parse1(selectorString), options);
+    const ast = parseley.parse1(selectorString);
+    reduceSelectorVariants(ast);
+    parseley.normalize(ast, {
+      mode: 'html',
+      attributesWithNormalizedValues: options.attributesWithNormalizedValues ?? [],
+      allowUnspecifiedCaseSensitivityForAttributes: false,
+    });
     results[i] = {
       ast: ast,
       terminal: {
@@ -87,19 +99,13 @@ function toAstTerminalPairs<V> (
   return results;
 }
 
-function preprocess (
-  ast: parseley.Ast.CompoundSelector,
-  options: DecisionTreeOptions,
-): parseley.Ast.CompoundSelector {
-  reduceSelectorVariants(ast);
-  parseley.normalize(ast, {
-    mode: 'html',
-    attributesWithNormalizedValues: options.attributesWithNormalizedValues ?? [],
-    allowUnspecifiedCaseSensitivityForAttributes: false,
-  });
-  return ast;
-}
-
+/**
+ * Transform selector ASTs by replacing class and id selectors
+ * with equivalent attribute value selectors, and removing universal selectors.
+ *
+ * This simplifies the decision tree construction
+ * by reducing the number of selector types to handle.
+ */
 function reduceSelectorVariants (ast: parseley.Ast.CompoundSelector): void {
   const newList: parseley.Ast.SimpleSelector[] = [];
   ast.list.forEach((sel) => {
@@ -141,7 +147,24 @@ function reduceSelectorVariants (ast: parseley.Ast.CompoundSelector): void {
   ast.list = newList;
 }
 
-function weave<V> (items: AstTerminalPair<V>[]): Ast.DecisionTreeNode<V>[] {
+/**
+ * Build decision-tree nodes from selector/terminal pairs.
+ *
+ * Algorithm (greedy, recursive):
+ * 1) Among all remaining simple selectors, pick the most frequent kind.
+ * 2) Split items into:
+ *    - `matches`: contain that kind (compiled into one branch now),
+ *    - `nonMatches`: deferred to later iterations of this level,
+ *    - `empty`: selectors already fully consumed (emitted via `terminate`).
+ * 3) Repeat until no items remain.
+ *
+ * Result is a list of sibling branches for the current level.
+ *
+ * Each branch recursively calls `weave` on selectors with one condition removed.
+ */
+function weave<V> (
+  items: AstTerminalPair<V>[],
+): Ast.DecisionTreeNode<V>[] {
   const branches: Ast.DecisionTreeNode<V>[] = [];
   while (items.length) {
     const topKind = findTopKey(
@@ -161,6 +184,15 @@ function weave<V> (items: AstTerminalPair<V>[]): Ast.DecisionTreeNode<V>[] {
   return branches;
 }
 
+/**
+ * Called on items with exhausted ASTs (no more simple selectors).
+ *
+ * Emits terminals; when faces popElement,
+ * it lifts direct terminals but keeps non-terminal continuation.
+ *
+ * @returns an array of terminal nodes and popElement nodes
+ * with no direct terminals in their continuations.
+ */
 function terminate<V> (
   items: AstTerminalPair<V>[],
 ): (Ast.TerminalNode<V> | Ast.PopElementNode<V>)[] {
@@ -184,6 +216,14 @@ function terminate<V> (
   return results;
 }
 
+/**
+ * Break the given items (AST-terminal pairs) into three groups:
+ * - `matches` - items whose ASTs contain at least one simple selector of the given kind;
+ * - `nonMatches` - items whose ASTs do not contain any simple selectors of the given kind;
+ * - `empty` - items whose ASTs are empty.
+ *
+ * Items are not modified.
+ */
 function breakByKind<V> (items: AstTerminalPair<V>[], selectedKind: string) {
   const matches: AstTerminalPair<V>[] = [];
   const nonMatches: AstTerminalPair<V>[] = [];
@@ -200,12 +240,19 @@ function breakByKind<V> (items: AstTerminalPair<V>[], selectedKind: string) {
   return { matches, nonMatches, empty };
 }
 
+/**
+ * Get the kind of a simple selector as a string.
+ *
+ * It is used to group simple selectors into branches of the decision tree.
+ */
 function getSelectorKind (sel: parseley.Ast.SimpleSelector): string {
   switch (sel.type) {
     case 'attrPresence':
       return `attrPresence ${sel.name}`;
     case 'attrValue':
       return `attrValue ${sel.name}`;
+    case 'pc':
+      return `pc ${sel.name}`;
     case 'combinator':
       return `combinator ${sel.combinator}`;
     default:
@@ -213,6 +260,9 @@ function getSelectorKind (sel: parseley.Ast.SimpleSelector): string {
   }
 }
 
+/**
+ * Create a branch of the decision tree for the given selector kind and matched items.
+ */
 function branchOfKind<V> (
   kind: string,
   items: AstTerminalPair<V>[],
@@ -225,6 +275,9 @@ function branchOfKind<V> (
   }
   if (kind.startsWith('attrPresence ')) {
     return attrPresenceBranch(kind.substring(13), items);
+  }
+  if (kind.startsWith('pc ')) {
+    return pseudoClassBranch(kind.substring(3), items);
   }
   if (kind === 'combinator >') {
     return combinatorBranch('>', items);
@@ -262,7 +315,10 @@ function attrPresenceBranch<V> (
   items: AstTerminalPair<V>[],
 ): Ast.AttrPresenceNode<V> {
   for (const item of items) {
-    spliceSimpleSelector(item, (x): x is parseley.Ast.AttributePresenceSelector => (x.type === 'attrPresence') && (x.name === name));
+    spliceSimpleSelector(
+      item,
+      (x): x is parseley.Ast.AttributePresenceSelector => (x.type === 'attrPresence') && (x.name === name),
+    );
   }
   return {
     type: 'attrPresence',
@@ -283,15 +339,13 @@ function attrValueBranch<V> (
   const matchers: Ast.MatcherNode<V>[] = [];
   for (const group of Object.values(groups)) {
     const sel = group.oneSimpleSelector;
-    const predicate = getAttrPredicate(sel);
-    const continuation = weave(group.items);
     matchers.push({
       type: 'matcher',
       matcher: sel.matcher,
       modifier: sel.modifier,
       value: sel.value,
-      predicate: predicate,
-      cont: continuation,
+      predicate: getAttrValuePredicate(sel),
+      cont: weave(group.items),
     });
   }
   return {
@@ -301,7 +355,11 @@ function attrValueBranch<V> (
   };
 }
 
-function getAttrPredicate (
+/**
+ * For a given attribute value selector, create a predicate function
+ * to match it against actual attribute values.
+ */
+function getAttrValuePredicate (
   sel: parseley.Ast.AttributeValueSelector,
 ): (actual: string) => boolean {
   if (sel.modifier === 'i') {
@@ -342,6 +400,34 @@ function getAttrPredicate (
   }
 }
 
+function pseudoClassBranch<V> (
+  name: string,
+  items: AstTerminalPair<V>[],
+): Ast.PseudoClassNode<V> {
+  if (
+    name !== 'empty'
+    && name !== 'only-child'
+    && name !== 'first-child'
+    && name !== 'last-child'
+    && name !== 'any-link'
+  ) {
+    throw new Error(`Unsupported pseudo-class: :${name}`);
+  }
+
+  for (const item of items) {
+    spliceSimpleSelector(
+      item,
+      (x): x is parseley.Ast.PseudoClassSelector => (x.type === 'pc') && (x.name === name),
+    );
+  }
+
+  return {
+    type: 'pseudoClass',
+    name: name,
+    cont: weave(items),
+  };
+}
+
 function combinatorBranch<V> (
   combinator: '>' | '+',
   items: AstTerminalPair<V>[],
@@ -367,21 +453,26 @@ function combinatorBranch<V> (
   };
 }
 
+/**
+ * Repeatedly find the most common key among simple selectors in the given items,
+ * where the key is determined by the given predicate and key callback,
+ * and splice all simple selectors with this key from the items, grouping them by the key.
+ *
+ * @returns a record mapping keys to groups of items with simple selectors of this key removed.
+ */
 function spliceAndGroup<V, S extends parseley.Ast.SimpleSelector> (
   items: AstTerminalPair<V>[],
   predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
   keyCallback: (sel: S) => string,
-) {
+): Record<string, SelectorsGroup<V, S>> {
   const groups: Record<string, SelectorsGroup<V, S>> = {};
   while (items.length) {
     const bestKey = findTopKey(items, predicate, keyCallback);
     const bestKeyPredicate =
-      (sel: parseley.Ast.SimpleSelector): sel is S =>
-        predicate(sel) && keyCallback(sel) === bestKey;
+      (sel: parseley.Ast.SimpleSelector): sel is S => predicate(sel) && keyCallback(sel) === bestKey;
     const hasBestKeyPredicate =
-      (item: AstTerminalPair<V>) =>
-        item.ast.list.some(bestKeyPredicate);
-    const { matches, rest } = partition1(items, hasBestKeyPredicate);
+      (item: AstTerminalPair<V>) => item.ast.list.some(bestKeyPredicate);
+    const { matches, rest } = partition(items, hasBestKeyPredicate);
     let oneSimpleSelector: S | null = null;
     for (const item of matches) {
       const splicedNode = spliceSimpleSelector(item, bestKeyPredicate);
@@ -396,6 +487,10 @@ function spliceAndGroup<V, S extends parseley.Ast.SimpleSelector> (
   return groups;
 }
 
+/**
+ * Remove all matching simple selectors (duplicates) from one compound selector,
+ * return first match.
+ */
 function spliceSimpleSelector<V, S extends parseley.Ast.SimpleSelector> (
   item: AstTerminalPair<V>,
   predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
@@ -417,6 +512,13 @@ function spliceSimpleSelector<V, S extends parseley.Ast.SimpleSelector> (
   return result as S;
 }
 
+/**
+ * Find the most common key among simple selectors in the given items,
+ * where the key is determined by the given predicate and key callback.
+ * The most common key is the one that appears in the largest number of items.
+ *
+ * @returns the most common key.
+ */
 function findTopKey<V, S extends parseley.Ast.SimpleSelector> (
   items: AstTerminalPair<V>[],
   predicate: (sel: parseley.Ast.SimpleSelector) => sel is S,
@@ -447,19 +549,21 @@ function findTopKey<V, S extends parseley.Ast.SimpleSelector> (
   return topKind;
 }
 
+/**
+ * Partition the given array into two arrays:
+ * one with items matching the predicate and one with the rest.
+ */
 function partition<T, R extends T> (
   src: T[],
   predicate: (x: T) => x is R,
-): { matches: R[]; rest: T[] } {
-  const matches: R[] = [];
-  const rest: T[] = [];
-  for (const x of src) {
-    if (predicate(x)) { matches.push(x); } else { rest.push(x); }
-  }
-  return { matches, rest };
-}
+): { matches: R[]; rest: T[] };
 
-function partition1<T> (
+function partition<T> (
+  src: T[],
+  predicate: (x: T) => boolean,
+): { matches: T[]; rest: T[] };
+
+function partition<T> (
   src: T[],
   predicate: (x: T) => boolean,
 ): { matches: T[]; rest: T[] } {

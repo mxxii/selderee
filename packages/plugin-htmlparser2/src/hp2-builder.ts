@@ -5,6 +5,7 @@
  */
 
 import { Element, Node, isTag } from 'domhandler';
+import { ElementType } from 'domelementtype';
 import { Picker, type Types, type Ast } from 'selderee';
 
 /**
@@ -50,6 +51,8 @@ function handleNode<V> (
       return handleAttrValueName(node);
     case 'attrPresence':
       return handleAttrPresenceName(node);
+    case 'pseudoClass':
+      return handlePseudoClassNode(node);
     case 'pushElement':
       return handlePushElementNode(node);
     case 'popElement':
@@ -104,6 +107,52 @@ function handleAttrValueName<V> (
   };
 }
 
+function handlePseudoClassNode<V> (
+  node: Ast.PseudoClassNode<V>,
+): Types.MatcherFunction<Element, V> {
+  const continuation = handleArray(node.cont);
+  const predicate = pseudoClassPredicates[node.name];
+  if (!predicate) {
+    throw new Error(`Unsupported pseudo-class: :${node.name}`);
+  }
+  return (el: Element, ...tail: Element[]) =>
+    predicate(el) ? continuation(el, ...tail) : [];
+}
+
+const pseudoClassPredicates: Record<string, (el: Element) => boolean> = {
+  'empty': isEmptyElement,
+  'only-child': isOnlyChildElement,
+  'first-child': isFirstChildElement,
+  'last-child': isLastChildElement,
+  'any-link': isAnyLinkElement,
+};
+
+function isEmptyElement (el: Element): boolean {
+  for (const child of el.children) {
+    if (isTag(child)) { return false; }
+    if (child.type === ElementType.Text || child.type === ElementType.CDATA) { return false; }
+  }
+  return true;
+}
+
+function isOnlyChildElement (el: Element): boolean {
+  return getPrecedingElement(el) === null && getFollowingElement(el) === null;
+}
+
+function isFirstChildElement (el: Element): boolean {
+  return getPrecedingElement(el) === null;
+}
+
+function isLastChildElement (el: Element): boolean {
+  return getFollowingElement(el) === null;
+}
+
+function isAnyLinkElement (el: Element): boolean {
+  return (el.name === 'a' || el.name === 'area')
+    && Object.prototype.hasOwnProperty.call(el.attribs, 'href');
+}
+
+
 function handlePushElementNode<V> (
   node: Ast.PushElementNode<V>,
 ): Types.MatcherFunction<Element, V> {
@@ -122,6 +171,12 @@ const getPrecedingElement = (el: Node): Element | null => {
   const prev = el.prev;
   if (prev === null) { return null; }
   return (isTag(prev)) ? prev : getPrecedingElement(prev);
+};
+
+const getFollowingElement = (el: Node): Element | null => {
+  const next = el.next;
+  if (next === null) { return null; }
+  return (isTag(next)) ? next : getFollowingElement(next);
 };
 
 const getParentElement = (el: Element): Element | null => {

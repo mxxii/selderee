@@ -58,6 +58,9 @@ function treeifyNode (node: anyNode): string {
       return `▣ Attr value: ${node.name}\n${treeifyArray(node.matchers, doubleLines)}`;
     case 'attrPresence':
       return `◨ Attr presence: ${node.name}\n${treeifyArray(node.cont)}`;
+    case 'pseudoClass':
+      return `◪ Pseudo-class: ${node.name}\n${treeifyArray(node.cont)}`;
+    // functional pseudo-class will use ▥ symbol
     case 'pushElement':
       return `◉ Push element: ${node.combinator}\n${treeifyArray(node.cont, thinLines)}`;
     case 'popElement':
