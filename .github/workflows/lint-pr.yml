@@ -1,10 +1,10 @@
-name: lint
+name: lint-pr
 
-on: [push]
+on: [pull_request]
 
 jobs:
   lint:
-    name: Run linters
+    name: Run linters on PR
 
     runs-on: ubuntu-latest
 

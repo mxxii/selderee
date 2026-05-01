@@ -1,10 +1,10 @@
-name: test
+name: test-pr
 
-on: [push]
+on: [pull_request]
 
 jobs:
   test:
-    name: Run tests
+    name: Run tests on PR
 
     strategy:
       matrix:
