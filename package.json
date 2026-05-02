@@ -36,7 +36,7 @@
     "@typescript-eslint/eslint-plugin": "~8.57.2",
     "ava": "^7.0.0",
     "copyfiles": "^2.4.1",
-    "eslint": "^9.39.4",
+    "eslint": "^10.3.0",
     "eslint-plugin-jsonc": "^2.21.1",
     "eslint-plugin-tsdoc": "^0.5.2",
     "htmlparser2": "^10.1.0",
